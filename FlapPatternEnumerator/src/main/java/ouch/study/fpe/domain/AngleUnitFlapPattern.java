@@ -1,5 +1,6 @@
 package ouch.study.fpe.domain;
 
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -256,7 +257,8 @@ public class AngleUnitFlapPattern implements Cloneable {
 		return lines.toString();
 	}
 
-	public boolean equals(AngleUnitFlapPattern obj) {
+	@Override
+	public boolean equals(Object obj) {
 		if (!(obj instanceof AngleUnitFlapPattern)) {
 			return false;
 		}
@@ -266,4 +268,32 @@ public class AngleUnitFlapPattern implements Cloneable {
 				&& (this.divisionSize == pattern.divisionSize);
 	}
 
+	/**
+	 * draws all lines.
+	 * 
+	 * @param g
+	 *            the place to draw
+	 * @param cx
+	 *            x position of the center
+	 * @param cy
+	 *            y position of the center
+	 * @param length
+	 *            the length of lines.
+	 */
+	public void draw(Graphics2D g, double cx, double cy, double length) {
+		GraphicFactory factory = new GraphicFactory();
+
+		for (int index = 0; index < lines.size(); index++) {
+			LineType type = lines.get(index);
+			if (type == null) {
+				continue;
+			}
+			RadialLineGraphic lineGraphic = factory.createRadialLine(length, asRadian(index), type);
+			lineGraphic.draw(g, cx, cy);
+		}
+	}
+
+	private double asRadian(int index) {
+		return (((double) index + 1) / divisionSize) * 2 * Math.PI;
+	}
 }

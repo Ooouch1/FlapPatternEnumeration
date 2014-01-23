@@ -1,6 +1,5 @@
 package ouch.study.fpe.domain;
 
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -10,22 +9,36 @@ import java.util.Set;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import ouch.study.fpe.domain.LineType.LineTypeComparator;
-
+/**
+ * Enumerator.
+ * 
+ * 
+ * 
+ * @author Koji
+ *
+ */
 public class FlapPatternEnumerator {
-	/** ロガー */
-	private static final Logger LOGGER = LogManager
-			.getLogger(FlapPatternEnumerator.class);
+	/** Logger. */
+	private static final Logger LOGGER = LogManager.getLogger(FlapPatternEnumerator.class);
 
 	/**
 	 * 
 	 * @param divisionSize
 	 *            should be even. odd number causes
 	 *            {@link IllegalArgumentException}.
+	 *            
+	 *            
+	 *  @param mirrorTestEnabled
+	 *  true if mirrored shapes should be removed.
+	 *  
+	 *  @param rotationTestEnabled
+	 *  true if rotated shapes should be removed.
+	 *  
+	 *            
 	 * @return a set of all unique patterns.
 	 */
-	public Set<AngleUnitFlapPattern> enumerateUniquePatterns(int divisionSize,
-			boolean mirrorTestEnabled, boolean rotationTestEnabled) {
+	public Set<AngleUnitFlapPattern> enumerateUniquePatterns(
+			final int divisionSize, final boolean mirrorTestEnabled, final boolean rotationTestEnabled) {
 
 		if (divisionSize % 2 == 1) {
 			throw new IllegalArgumentException(
@@ -33,14 +46,13 @@ public class FlapPatternEnumerator {
 		}
 
 		AngleUnitFlapPattern seed = new AngleUnitFlapPattern(divisionSize);
-		// set direction unique.
-		seed.set(0, LineType.MOUNTAIN);
 
 		// prepare storages
 		Set<AngleUnitFlapPattern> patterns = new HashSet<>();
 		Set<AngleUnitFlapPattern> mountainOnlyPatterns = new HashSet<>();
 		mountainOnlyPatterns.add(seed);
 
+		// enumeration loop
 		for (int mountainCount = 1; mountainCount <= divisionSize / 2 - 1; mountainCount++) {
 			PatternDuplicationTester tester = new PatternDuplicationTester(
 					mirrorTestEnabled, rotationTestEnabled);
@@ -49,17 +61,20 @@ public class FlapPatternEnumerator {
 
 			LOGGER.debug("create mountain only");
 
-			mountainOnlyPatterns = removeDuplications(
-					createMountainAddedPatterns(seed, mountainCount - 1, false),
-					//advanceByMountain(mountainOnlyPatterns, false),
+			mountainOnlyPatterns =
+					advanceByMountain(mountainOnlyPatterns, false);
+
+			Set<AngleUnitFlapPattern> uniqueMountainOnlys = removeDuplications(
+					mountainOnlyPatterns,
 					tester);
 
+			LOGGER.debug("#all of mountain only: " + mountainOnlyPatterns.size());
 			LOGGER.info("#uniques of mountain only: "
-					+ mountainOnlyPatterns.size());
-			LOGGER.debug(mountainOnlyPatterns);
+					+ uniqueMountainOnlys.size());
+			LOGGER.debug(uniqueMountainOnlys);
 
 			LOGGER.debug("add valleys for each");
-			for (AngleUnitFlapPattern mountainOnly : mountainOnlyPatterns) {
+			for (AngleUnitFlapPattern mountainOnly : uniqueMountainOnlys) {
 				patterns.addAll(removeDuplications(
 						createValleyAddedPatterns(mountainOnly,
 								mountainCount + 2, true), tester));
@@ -100,28 +115,28 @@ public class FlapPatternEnumerator {
 		return uniques;
 	}
 
-	private class FlapPatternComparator implements Comparator<AngleUnitFlapPattern> {
-		@Override
-		public int compare(AngleUnitFlapPattern p1, AngleUnitFlapPattern p2) {
-			if (p1.equals(p2)) {
-				return 0;
-			}
-
-			if (p1.getDivisionSize() < p2.getDivisionSize()) {
-				return -1;
-			}
-
-			for (int i = 0; i < p1.getDivisionSize(); i++) {
-				Comparator<LineType> lineComparator = new LineTypeComparator();
-				int cmp = lineComparator.compare(p1.getLines().get(i), p2.getLines().get(i));
-				if (cmp != 0) {
-					return cmp;
-				}
-			}
-
-			return 0;
-		}
-	}
+	//	private class FlapPatternComparator implements Comparator<AngleUnitFlapPattern> {
+	//		@Override
+	//		public int compare(AngleUnitFlapPattern p1, AngleUnitFlapPattern p2) {
+	//			if (p1.equals(p2)) {
+	//				return 0;
+	//			}
+	//
+	//			if (p1.getDivisionSize() < p2.getDivisionSize()) {
+	//				return -1;
+	//			}
+	//
+	//			for (int i = 0; i < p1.getDivisionSize(); i++) {
+	//				Comparator<OrigamiLine> lineComparator = new LineTypeComparator();
+	//				int cmp = lineComparator.compare(p1.getLines().get(i), p2.getLines().get(i));
+	//				if (cmp != 0) {
+	//					return cmp;
+	//				}
+	//			}
+	//
+	//			return 0;
+	//		}
+	//	}
 
 	private Set<AngleUnitFlapPattern> createMountainAddedPatterns(
 			AngleUnitFlapPattern seed, int additionCount,
@@ -142,24 +157,24 @@ public class FlapPatternEnumerator {
 				LineType.VALLEY, additonCount);
 	}
 
-	//	private Set<AngleUnitFlapPattern> advanceByMountain(Set<AngleUnitFlapPattern> seeds, boolean testFoldability) {
-	//		PatternSetFactory factory = new PatternSetFactory(
-	//				seeds.iterator().next().getTailIndex(), testFoldability);
-	//
-	//		if (seeds.size() == 1) {
-	//			// set line if seed is empty.
-	//			// set direction unique.
-	//			AngleUnitFlapPattern seed = seeds.iterator().next().cloneInstance();
-	//			if (seed.isEmpty()) {
-	//				// set direction unique.
-	//				seed.set(0, LineType.MOUNTAIN);
-	//				HashSet<AngleUnitFlapPattern> first = new HashSet<>();
-	//				first.add(seed);
-	//				return first;
-	//			}
-	//		}
-	//
-	//		return factory.advanceAll(seeds, LineType.MOUNTAIN);
-	//	}
+	private Set<AngleUnitFlapPattern> advanceByMountain(Set<AngleUnitFlapPattern> seeds, boolean testFoldability) {
+		PatternSetFactory factory = new PatternSetFactory(
+				seeds.iterator().next().getTailIndex(), testFoldability);
+
+		if (seeds.size() == 1) {
+			// set line if seed is empty.
+			// set direction unique.
+			AngleUnitFlapPattern seed = seeds.iterator().next().cloneInstance();
+			if (seed.isEmpty()) {
+				// set direction unique.
+				seed.set(0, LineType.MOUNTAIN);
+				HashSet<AngleUnitFlapPattern> first = new HashSet<>();
+				first.add(seed);
+				return first;
+			}
+		}
+
+		return factory.advanceAll(seeds, LineType.MOUNTAIN);
+	}
 
 }

@@ -20,12 +20,12 @@ import ouch.study.fpe.domain.AngleUnitFlapPattern;
 
 public class MainWindow extends JFrame {
 
-	private JButton executionButton = new JButton("run");
-	private JPanel paintScreen = new PaintScreen();
+	private final JButton executionButton = new JButton("run");
+	private final PaintScreen paintScreen = new PaintScreen();
 
-	private JTextField divisionText = new JTextField(8);
+	private final JTextField divisionText = new JTextField(8);
 
-	private JLabel messageArea = new JLabel("message");
+	private final JLabel messageArea = new JLabel("message");
 
 	public MainWindow() {
 		configureViewElements();
@@ -80,6 +80,12 @@ public class MainWindow extends JFrame {
 		executionButton.addActionListener(new OnClickExecutionButton());
 	}
 
+	// ==========================================================================
+	// View Controllers:
+	// Sends input values to the controllers.
+	// these class should have short methods only.
+	// ==========================================================================
+
 	private class OnClickExecutionButton implements ActionListener {
 
 		@Override
@@ -88,9 +94,15 @@ public class MainWindow extends JFrame {
 				RunEnumeration command = new RunEnumeration(
 						Integer.parseInt(divisionText.getText()), true, true);
 
-				Set<AngleUnitFlapPattern> results = command.run();
+				Set<AngleUnitFlapPattern> patterns = command.run();
 
-				messageArea.setText(Integer.toString(results.size()));
+				messageArea.setText(Integer.toString(patterns.size()));
+
+				paintScreen.setPatterns(patterns);
+				paintScreen.requestDraw(0);
+
+				repaint();
+
 			} catch (IllegalArgumentException ex) {
 				JOptionPane.showMessageDialog(MainWindow.this, ex);
 			}
