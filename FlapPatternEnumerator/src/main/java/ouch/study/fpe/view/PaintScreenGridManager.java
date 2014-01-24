@@ -4,11 +4,15 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JPanel;
-
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+/**
+ * This object manages grids (boxes which are tiled on the screen).
+ * 
+ * @author Koji
+ * 
+ */
 public class PaintScreenGridManager {
 
 	/** Logger. */
@@ -16,23 +20,27 @@ public class PaintScreenGridManager {
 
 	private double columnSize = 5;
 
-	private final JPanel panel;
+	private double width;
+	private double height;
 
 	private List<Rectangle2D> boxes = new ArrayList<>();
 
 	/**
 	 * 
-	 * @param p
-	 *            panel
+	 * @param width
+	 *            width of the area for whole of grids
+	 * @param height
+	 *            height of the area for whole of grids
 	 */
-	public PaintScreenGridManager(JPanel p) {
-		panel = p;
+	public PaintScreenGridManager(final double width, final double height) {
 
-		update();
+		update(width, height);
+
 	}
 
 	/**
-	 * 
+	 * @param c
+	 *            ammount of columns
 	 */
 	public void changeColumnSize(double c) {
 		if (columnSize == c) {
@@ -43,17 +51,34 @@ public class PaintScreenGridManager {
 	}
 
 	public void update() {
-		LOGGER.debug("panel width: " + panel.getWidth());
+		LOGGER.debug("panel width: " + width);
+
+		boxes = createBoundBoxes();
+	}
+
+	/**
+	 * 
+	 * @param w
+	 *            width of the area for whole of grids
+	 * @param h
+	 *            height of the area for whole of grids
+	 */
+	public void update(double w, double h) {
+		width = w;
+		height = h;
+		LOGGER.debug("panel width: " + width);
+
 		boxes = createBoundBoxes();
 	}
 
 	/**
 	 * 
 	 * @param index
+	 *            index of box
 	 * @return
 	 *         a box at the given index. null if index is out of grids.
 	 */
-	public Rectangle2D getBoundBox(int index) {
+	public Rectangle2D getBoundBox(final int index) {
 
 		if (index >= boxes.size()) {
 			return null;
@@ -62,6 +87,10 @@ public class PaintScreenGridManager {
 		return boxes.get(index);
 	}
 
+	/**
+	 * 
+	 * @return the count of all boxes.
+	 */
 	public int getBoxCount() {
 		return boxes.size();
 	}
@@ -74,8 +103,8 @@ public class PaintScreenGridManager {
 	private List<Rectangle2D> createBoundBoxes() {
 		List<Rectangle2D> boxes = new ArrayList<>();
 
-		double boxSize = panel.getWidth() / columnSize;
-		int rowSize = (int) (panel.getHeight() / boxSize);
+		double boxSize = width / columnSize;
+		int rowSize = (int) (height / boxSize);
 
 		for (int y = 0; y < rowSize; y++) {
 			for (int x = 0; x < columnSize; x++) {

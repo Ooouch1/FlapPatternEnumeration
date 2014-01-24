@@ -12,7 +12,9 @@ public enum LineType {
 	/**
 	 * valley fold.
 	 */
-	VALLEY(Color.BLUE);
+	VALLEY(Color.BLUE),
+
+	EMPTY(null);
 
 	/**
 	 * the color for graphic.

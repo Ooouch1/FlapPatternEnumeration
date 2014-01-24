@@ -6,6 +6,19 @@ import java.util.Set;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import oripa.util.collection.Rule;
+import ouch.study.fpe.domain.rule.AlwaysTrue;
+import ouch.study.fpe.domain.rule.OrigamiFoldability;
+
+/**
+ * This object generates the all patterns according to given condition.
+ * The generation creates a new pattern by adding lines to seed pattern one by
+ * one.
+ * the addition is done between given start index and given tail index.
+ * 
+ * @author Koji
+ * 
+ */
 public class PatternSetFactory {
 	/** ロガー */
 	private static final Logger LOGGER = LogManager
@@ -13,12 +26,39 @@ public class PatternSetFactory {
 
 	private HashSet<AngleUnitFlapPattern> patterns = new HashSet<>();
 
-	private Integer tailIndex;
-	private boolean foldabilityTestEnabled;
+	private final Integer tailIndex;
 
+	private Rule<AngleUnitFlapPattern> acceptablePatternCondition = new AlwaysTrue();
+
+	/**
+	 * 
+	 * 
+	 * @param tailIndex
+	 *            the index at which this object stops adding line.
+	 * @param enableFoldabilityTest
+	 *            true if you want to get foldables only.
+	 */
+	@SuppressWarnings("unchecked")
 	public PatternSetFactory(Integer tailIndex, boolean enableFoldabilityTest) {
 		this.tailIndex = tailIndex;
-		this.foldabilityTestEnabled = enableFoldabilityTest;
+
+		if (enableFoldabilityTest) {
+			acceptablePatternCondition = new OrigamiFoldability();
+		}
+	}
+
+	/**
+	 * 
+	 * @param tailIndex
+	 *            the index at which this object stops adding.
+	 * @param acceptablePatternCondition
+	 *            any {@link Rule} object which describes your preferrable
+	 *            feature.
+	 */
+	public PatternSetFactory(Integer tailIndex,
+			Rule<AngleUnitFlapPattern> acceptablePatternCondition) {
+		this.tailIndex = tailIndex;
+		this.acceptablePatternCondition = acceptablePatternCondition;
 	}
 
 	/**
@@ -45,15 +85,35 @@ public class PatternSetFactory {
 		return patterns;
 	}
 
-	public Set<AngleUnitFlapPattern> advance(AngleUnitFlapPattern seed,
-			int startIndex, LineType typeToBeAdded) {
+	/**
+	 * creates patterns by adding one line.
+	 * 
+	 * @param seed
+	 *            seed pattern
+	 * @param startIndex
+	 *            start index of adding line
+	 * @param typeToBeAdded
+	 *            the line type to be added
+	 * @return
+	 *         patterns that each of them has one more line than given seed.
+	 */
+	public Set<AngleUnitFlapPattern> advance(final AngleUnitFlapPattern seed,
+			final int startIndex, final LineType typeToBeAdded) {
 		patterns = new HashSet<>();
 		createPatternsImpl(
 				seed.cloneInstance(), typeToBeAdded, startIndex, 0, 1);
 		return patterns;
 	}
 
-	public Set<AngleUnitFlapPattern> advanceAll(Set<AngleUnitFlapPattern> seeds, LineType typeToBeAdded) {
+	/**
+	 * {@link #advance(AngleUnitFlapPattern, int, LineType)} for each.
+	 * 
+	 * @param seeds
+	 * @param typeToBeAdded
+	 * @return
+	 *         merged set of advanced patterns for every seeds.
+	 */
+	public Set<AngleUnitFlapPattern> advanceAll(final Set<AngleUnitFlapPattern> seeds, final LineType typeToBeAdded) {
 		patterns = new HashSet<>();
 		for (AngleUnitFlapPattern seed : seeds) {
 			createPatternsImpl(
@@ -77,20 +137,15 @@ public class PatternSetFactory {
 	 * @param aimedAdditionCount
 	 *            the number that additionCount should reaches.
 	 */
-	private void createPatternsImpl(AngleUnitFlapPattern seed,
-			LineType typeToBeAdded, int lastIndex, int additionCount,
+	private void createPatternsImpl(final AngleUnitFlapPattern seed,
+			final LineType typeToBeAdded, final int lastIndex, final int additionCount,
 			int aimedAdditionCount) {
 
 		if (additionCount == aimedAdditionCount) {
-			if (foldabilityTestEnabled) {
-				if (seed.isFoldable()) {
-					patterns.add(seed.cloneInstance());
-				}
+			if (acceptablePatternCondition.holds(seed)) {
+				patterns.add(seed.cloneInstance());
 				return;
 			}
-
-			patterns.add(seed.cloneInstance());
-			return;
 		}
 
 		if (lastIndex == tailIndex) {
@@ -104,11 +159,11 @@ public class PatternSetFactory {
 			seed.set(i, typeToBeAdded);
 			createPatternsImpl(seed, typeToBeAdded, i, additionCount + 1,
 					aimedAdditionCount);
-			seed.set(i, null);
+			seed.set(i, LineType.EMPTY);
 		}
 	}
 
-	private void logDebug(Set<AngleUnitFlapPattern> patterns) {
+	private void logDebug(final Set<AngleUnitFlapPattern> patterns) {
 		LOGGER.debug("#patterns = " + patterns.size());
 		LOGGER.debug(patterns);
 	}

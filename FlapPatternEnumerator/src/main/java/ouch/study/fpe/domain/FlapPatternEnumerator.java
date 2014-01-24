@@ -9,6 +9,8 @@ import java.util.Set;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import ouch.study.fpe.domain.rule.PatternDuplicationTester;
+
 /**
  * Enumerator.
  * 

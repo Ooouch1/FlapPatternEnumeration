@@ -28,6 +28,7 @@ public class MainWindow extends JFrame {
 	private final JLabel messageArea = new JLabel("message");
 
 	public MainWindow() {
+
 		configureViewElements();
 		configureListeners();
 
@@ -74,6 +75,7 @@ public class MainWindow extends JFrame {
 		contentPane.add(inputArea);
 		contentPane.add(messageArea);
 		contentPane.add(paintScreen);
+
 	}
 
 	private void configureListeners() {

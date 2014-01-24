@@ -5,7 +5,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class AngleUnitFlapPattern implements Cloneable {
+/**
+ * This object describes a flap which is composed with 360/k degrees angles.
+ * 
+ * @author Koji
+ * 
+ */
+public class AngleUnitFlapPattern implements Cloneable, Comparable<AngleUnitFlapPattern> {
 
 	private final List<LineType> lines;
 
@@ -20,7 +26,7 @@ public class AngleUnitFlapPattern implements Cloneable {
 		this.divisionSize = divisionSize;
 
 		LineType[] initialValues = new LineType[divisionSize];
-		Arrays.fill(initialValues, null);
+		Arrays.fill(initialValues, LineType.EMPTY);
 
 		lines = Arrays.asList(initialValues);
 	}
@@ -59,7 +65,7 @@ public class AngleUnitFlapPattern implements Cloneable {
 		int valleyCount = 0;
 
 		for (LineType type : lines) {
-			if (type == null) {
+			if (isEmpty(type)) {
 				continue;
 			}
 			switch (type) {
@@ -87,7 +93,7 @@ public class AngleUnitFlapPattern implements Cloneable {
 
 			diff += flipFlopSign;
 
-			if (type == null) {
+			if (isEmpty(type)) {
 				continue;
 			}
 			flipFlopSign *= -1;
@@ -99,7 +105,7 @@ public class AngleUnitFlapPattern implements Cloneable {
 	public int findFirstLineIndex() {
 		int index = 0;
 		for (LineType type : lines) {
-			if (type == null) {
+			if (isEmpty(type)) {
 				index++;
 			} else {
 				return index;
@@ -139,7 +145,8 @@ public class AngleUnitFlapPattern implements Cloneable {
 	}
 
 	public boolean isEmptyAt(int index) {
-		return lines.get(index) == null;
+		LineType type = lines.get(index);
+		return isEmpty(type);
 	}
 
 	public boolean isEmpty() {
@@ -150,6 +157,10 @@ public class AngleUnitFlapPattern implements Cloneable {
 		}
 
 		return true;
+	}
+
+	private boolean isEmpty(LineType type) {
+		return type == null || type == LineType.EMPTY;
 	}
 
 	/**
@@ -284,10 +295,10 @@ public class AngleUnitFlapPattern implements Cloneable {
 		GraphicFactory factory = new GraphicFactory();
 
 		for (int index = 0; index < lines.size(); index++) {
-			LineType type = lines.get(index);
-			if (type == null) {
+			if (isEmptyAt(index)) {
 				continue;
 			}
+			LineType type = lines.get(index);
 			RadialLineGraphic lineGraphic = factory.createRadialLine(length, asRadian(index), type);
 			lineGraphic.draw(g, cx, cy);
 		}
@@ -295,5 +306,42 @@ public class AngleUnitFlapPattern implements Cloneable {
 
 	private double asRadian(int index) {
 		return (((double) index + 1) / divisionSize) * 2 * Math.PI;
+	}
+
+	@Override
+	public int compareTo(AngleUnitFlapPattern o) {
+
+		int thisCountLine = this.countLines();
+		int oCountLine = o.countLines();
+
+		if (this.divisionSize != o.divisionSize) {
+			return Integer.compare(this.divisionSize, o.divisionSize);
+
+		} else if (thisCountLine != oCountLine) {
+			return Integer.compare(thisCountLine, oCountLine);
+		} else {
+
+			for (int i = 0; i < divisionSize; i++) {
+				LineType thisLine = this.lines.get(i);
+				LineType oLine = o.lines.get(i);
+				if (thisLine == oLine) {
+					continue;
+				}
+				return thisLine.compareTo(oLine);
+			}
+		}
+
+		return 0;
+	}
+
+	public int countLines() {
+		int count = 0;
+		for (LineType type : lines) {
+			if (!isEmpty(type)) {
+				count++;
+			}
+		}
+
+		return count;
 	}
 }
