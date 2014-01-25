@@ -1,15 +1,13 @@
 package ouch.study.fpe.domain;
 
-import java.util.HashSet;
-import java.util.Iterator;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import ouch.study.fpe.domain.rule.PatternDuplicationTester;
+import oripa.util.collection.Rule;
 
 /**
  * Enumerator.
@@ -17,29 +15,33 @@ import ouch.study.fpe.domain.rule.PatternDuplicationTester;
  * 
  * 
  * @author Koji
- *
+ * 
  */
 public class FlapPatternEnumerator {
 	/** Logger. */
 	private static final Logger LOGGER = LogManager.getLogger(FlapPatternEnumerator.class);
+
+	private final static RuleFactory ruleFactory = new RuleFactory();
+
+	int recursionCount = 0;
 
 	/**
 	 * 
 	 * @param divisionSize
 	 *            should be even. odd number causes
 	 *            {@link IllegalArgumentException}.
-	 *            
-	 *            
-	 *  @param mirrorTestEnabled
-	 *  true if mirrored shapes should be removed.
-	 *  
-	 *  @param rotationTestEnabled
-	 *  true if rotated shapes should be removed.
-	 *  
-	 *            
+	 * 
+	 * 
+	 * @param mirrorTestEnabled
+	 *            true if mirrored shapes should be removed.
+	 * 
+	 * @param rotationTestEnabled
+	 *            true if rotated shapes should be removed.
+	 * 
+	 * 
 	 * @return a set of all unique patterns.
 	 */
-	public Set<AngleUnitFlapPattern> enumerateUniquePatterns(
+	public Collection<AngleUnitFlapPattern> enumerateUniquePatterns(
 			final int divisionSize, final boolean mirrorTestEnabled, final boolean rotationTestEnabled) {
 
 		if (divisionSize % 2 == 1) {
@@ -47,136 +49,107 @@ public class FlapPatternEnumerator {
 					"divisionSize should be even number.");
 		}
 
-		AngleUnitFlapPattern seed = new AngleUnitFlapPattern(divisionSize);
-
 		// prepare storages
-		Set<AngleUnitFlapPattern> patterns = new HashSet<>();
-		Set<AngleUnitFlapPattern> mountainOnlyPatterns = new HashSet<>();
-		mountainOnlyPatterns.add(seed);
-
-		// enumeration loop
-		for (int mountainCount = 1; mountainCount <= divisionSize / 2 - 1; mountainCount++) {
-			PatternDuplicationTester tester = new PatternDuplicationTester(
-					mirrorTestEnabled, rotationTestEnabled);
-
-			LOGGER.debug("mountain line count is " + mountainCount);
-
-			LOGGER.debug("create mountain only");
-
-			mountainOnlyPatterns =
-					advanceByMountain(mountainOnlyPatterns, false);
-
-			Set<AngleUnitFlapPattern> uniqueMountainOnlys = removeDuplications(
-					mountainOnlyPatterns,
-					tester);
-
-			LOGGER.debug("#all of mountain only: " + mountainOnlyPatterns.size());
-			LOGGER.info("#uniques of mountain only: "
-					+ uniqueMountainOnlys.size());
-			LOGGER.debug(uniqueMountainOnlys);
-
-			LOGGER.debug("add valleys for each");
-			for (AngleUnitFlapPattern mountainOnly : uniqueMountainOnlys) {
-				patterns.addAll(removeDuplications(
-						createValleyAddedPatterns(mountainOnly,
-								mountainCount + 2, true), tester));
-			}
-		}
+		Collection<AngleUnitFlapPattern> patterns = createPatterns(
+				divisionSize, mirrorTestEnabled, rotationTestEnabled);
 
 		LOGGER.info("# unique patterns: " + patterns.size());
+		LOGGER.info("#call of reursion: " + recursionCount);
 		return patterns;
 	}
 
-	public Set<AngleUnitFlapPattern> removeDuplications(
-			Set<AngleUnitFlapPattern> patterns, PatternDuplicationTester tester) {
+	private Collection<AngleUnitFlapPattern> createPatterns(
+			final int divisionSize, final boolean mirrorTestEnabled, final boolean rotationTestEnabled) {
 
-		Set<AngleUnitFlapPattern> uniques = new HashSet<>();
-		List<AngleUnitFlapPattern> notDetermined = new LinkedList<>(patterns);
-		//Collections.sort(notDetermined, new FlapPatternComparator());
+		List<AngleUnitFlapPattern> patterns = new LinkedList<>();
 
-		while (!notDetermined.isEmpty()) {
+		LOGGER.info("create mountain only, degree ");
 
-			Iterator<AngleUnitFlapPattern> seeker = notDetermined.iterator();
-			AngleUnitFlapPattern unique = seeker.next();
-			seeker.remove();
-			uniques.add(unique);
+		Collection<AngleUnitFlapPattern> uniqueMountainOnlys =
+				createAllMountainOnlyPatterns(new AngleUnitFlapPattern(divisionSize), divisionSize / 2 - 1);
 
-			for (; seeker.hasNext();) {
-				AngleUnitFlapPattern pattern = seeker.next();
-				if (tester.isDuplicate(pattern, unique)) {
-					// if (pattern.isMirrorOf(unique, 0)) {
-					if (LOGGER.isDebugEnabled()) {
-						LOGGER.debug("remove " + pattern);
-					}
-					seeker.remove();
-				}
-			}
+		LOGGER.debug("#all of mountain only: " + uniqueMountainOnlys.size());
+		LOGGER.info("#uniques of mountain only: "
+				+ uniqueMountainOnlys.size());
+		LOGGER.debug(uniqueMountainOnlys);
 
+		Rule<AngleUnitFlapPattern> pruningRule = ruleFactory
+				.createDuplicationDetector(0);
+
+		LOGGER.info("add valleys for each");
+		for (AngleUnitFlapPattern mountainOnly : uniqueMountainOnlys) {
+			int mountainCount = mountainOnly.countLines();
+			patterns.addAll(
+					createValleyAddedPatterns(mountainOnly,
+							mountainCount + 2, mountainCount * 2 + 2, pruningRule));
 		}
 
-		return uniques;
+		return patterns;
+
 	}
 
-	//	private class FlapPatternComparator implements Comparator<AngleUnitFlapPattern> {
-	//		@Override
-	//		public int compare(AngleUnitFlapPattern p1, AngleUnitFlapPattern p2) {
-	//			if (p1.equals(p2)) {
-	//				return 0;
-	//			}
-	//
-	//			if (p1.getDivisionSize() < p2.getDivisionSize()) {
-	//				return -1;
-	//			}
-	//
-	//			for (int i = 0; i < p1.getDivisionSize(); i++) {
-	//				Comparator<OrigamiLine> lineComparator = new LineTypeComparator();
-	//				int cmp = lineComparator.compare(p1.getLines().get(i), p2.getLines().get(i));
-	//				if (cmp != 0) {
-	//					return cmp;
-	//				}
-	//			}
-	//
-	//			return 0;
-	//		}
-	//	}
+	/**
+	 * 
+	 * @param seed
+	 *            seed of new patterns
+	 * @param additonCount
+	 *            ammount of new lines
+	 * @param pruningRule
+	 *            rule which holds true if the recursion should skip to next
+	 *            pattern.
+	 * @return
+	 *         patterns with new valley lines.
+	 */
+	private List<AngleUnitFlapPattern> createValleyAddedPatterns(
+			final AngleUnitFlapPattern seed, final int additonCount, final int expectedTotalLineCount,
+			final Rule<AngleUnitFlapPattern> pruningRule) {
 
-	private Set<AngleUnitFlapPattern> createMountainAddedPatterns(
-			AngleUnitFlapPattern seed, int additionCount,
-			boolean testFoldability) {
-		PatternSetFactory adder = new PatternSetFactory(
-				seed.getTailIndex(), testFoldability);
+		Rule<AngleUnitFlapPattern> acceptionRule = ruleFactory
+				.createFoldablilityRuleAsConjunctionable()
+				.addRule(ruleFactory.createAcceptableByLineCount(expectedTotalLineCount)
+				);
 
-		return adder.createPatternsByAddingLineRecursively(seed,
-				LineType.MOUNTAIN, additionCount);
-	}
-
-	private Set<AngleUnitFlapPattern> createValleyAddedPatterns(
-			AngleUnitFlapPattern seed, int additonCount, boolean testFoldability) {
-		PatternSetFactory adder = new PatternSetFactory(
-				seed.getTailIndex(), testFoldability);
-
-		return adder.createPatternsByAddingLineRecursively(seed,
-				LineType.VALLEY, additonCount);
-	}
-
-	private Set<AngleUnitFlapPattern> advanceByMountain(Set<AngleUnitFlapPattern> seeds, boolean testFoldability) {
 		PatternSetFactory factory = new PatternSetFactory(
-				seeds.iterator().next().getTailIndex(), testFoldability);
+				seed.getTailIndex(), acceptionRule, pruningRule);
 
-		if (seeds.size() == 1) {
-			// set line if seed is empty.
-			// set direction unique.
-			AngleUnitFlapPattern seed = seeds.iterator().next().cloneInstance();
-			if (seed.isEmpty()) {
-				// set direction unique.
-				seed.set(0, LineType.MOUNTAIN);
-				HashSet<AngleUnitFlapPattern> first = new HashSet<>();
-				first.add(seed);
-				return first;
-			}
-		}
+		List<AngleUnitFlapPattern> result = factory.createPatternsByAddingLineRecursively(seed,
+				LineType.VALLEY, additonCount);
 
-		return factory.advanceAll(seeds, LineType.MOUNTAIN);
+		recursionCount += factory.getRecursionCount();
+
+		return result;
+	}
+
+	/**
+	 * 
+	 * @param seed
+	 *            seed of new patterns
+	 * @param maxMountainCount
+	 *            ammount of new lines
+	 * 
+	 *            pattern.
+	 * @return
+	 *         patterns with new valley lines.
+	 */
+	private List<AngleUnitFlapPattern> createAllMountainOnlyPatterns(
+			final AngleUnitFlapPattern seed, final int maxMountainCount) {
+
+		Rule<AngleUnitFlapPattern> acceptionRule = ruleFactory.createAlwaysAcceptable();
+		// Rule<AngleUnitFlapPattern> acceptionRule =
+		// ruleFactory.createAcceptableByLineCount(expectedTotalLineCount);
+
+		Rule<AngleUnitFlapPattern> pruningRule = ruleFactory
+				.createDuplicationDetector(0);
+
+		PatternSetFactory factory = new PatternSetFactory(
+				seed.getTailIndex(), acceptionRule, pruningRule);
+
+		List<AngleUnitFlapPattern> result = factory.createPatternsByAddingLineRecursively(seed,
+				LineType.MOUNTAIN, maxMountainCount);
+
+		recursionCount += factory.getRecursionCount();
+
+		return result;
 	}
 
 }

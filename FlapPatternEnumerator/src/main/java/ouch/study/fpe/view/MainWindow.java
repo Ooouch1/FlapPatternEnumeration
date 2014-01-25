@@ -3,7 +3,7 @@ package ouch.study.fpe.view;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Set;
+import java.util.Collection;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -91,12 +91,12 @@ public class MainWindow extends JFrame {
 	private class OnClickExecutionButton implements ActionListener {
 
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(final ActionEvent e) {
 			try {
 				RunEnumeration command = new RunEnumeration(
 						Integer.parseInt(divisionText.getText()), true, true);
 
-				Set<AngleUnitFlapPattern> patterns = command.run();
+				Collection<AngleUnitFlapPattern> patterns = command.run();
 
 				messageArea.setText(Integer.toString(patterns.size()));
 

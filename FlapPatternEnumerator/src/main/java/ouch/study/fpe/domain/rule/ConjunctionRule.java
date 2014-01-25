@@ -16,24 +16,31 @@ public class ConjunctionRule<Variable> extends AbstractRule<Variable> {
 	public ConjunctionRule() {
 	}
 
-	public ConjunctionRule(Collection<Rule<Variable>> rules) {
+	public ConjunctionRule(final Collection<Rule<Variable>> rules) {
 		this.rules.addAll(rules);
 	}
 
-	public ConjunctionRule(Rule<Variable> rule) {
+	public ConjunctionRule(final Rule<Variable> rule) {
 		this.rules.add(rule);
 	}
 
-	public void addRule(Rule<Variable> r) {
+	/**
+	 * 
+	 * @param r
+	 * @return
+	 *         this instance after adding r.
+	 */
+	public ConjunctionRule<Variable> addRule(final Rule<Variable> r) {
 		rules.add(r);
+		return this;
 	}
 
-	public void addAllRules(Collection<Rule<Variable>> r) {
+	public void addAllRules(final Collection<Rule<Variable>> r) {
 		rules.addAll(r);
 	}
 
 	@Override
-	public boolean holds(Variable var) {
+	public boolean holds(final Variable var) {
 		for (Rule<Variable> rule : rules) {
 			if (rule.violates(var)) {
 				return false;

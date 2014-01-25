@@ -2,7 +2,7 @@ package ouch.study.fpe.domain;
 
 import static org.junit.Assert.*;
 
-import java.util.Set;
+import java.util.Collection;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -15,27 +15,40 @@ public class EnumeratorTest {
 
 	@Test
 	public void test90Degrees() {
-		LOGGER.debug("start 90 degrees test");
-		FlapPatternEnumerator enumerator = new FlapPatternEnumerator();
-
-		Set<AngleUnitFlapPattern> patterns = enumerator
-				.enumerateUniquePatterns(360 / 90, true, true);
-
-		assertEquals(1, patterns.size());
-		LOGGER.info("#patterns = " + patterns.size());
-		LOGGER.info(patterns);
+		runEnumeration(4, 1);
 	}
 
 	@Test
 	public void test45Degrees() {
-		LOGGER.debug("start 45 degrees test");
+		runEnumeration(8, -1);
+		// not confirmed
+		// runEnumeration(8, 34);
+	}
+
+	@Test
+	public void test22_5Degrees() {
+		runEnumeration(16, -1);
+	}
+
+	private void runEnumeration(final int divisionSize, final int expectedPatternCount) {
+		LOGGER.debug("start " + 360.0 / divisionSize + " degrees test");
 		FlapPatternEnumerator enumerator = new FlapPatternEnumerator();
 
-		Set<AngleUnitFlapPattern> patterns = enumerator
-				.enumerateUniquePatterns(360 / 45, true, true);
+		long startMillis = System.currentTimeMillis();
 
-		// assertEquals(1, patterns.size());
-		LOGGER.info("#patterns = " + patterns.size());
-		LOGGER.info(patterns);
+		Collection<AngleUnitFlapPattern> patterns = enumerator
+				.enumerateUniquePatterns(divisionSize, true, true);
+
+		LOGGER.info("SPENT TIME = " + (System.currentTimeMillis() - startMillis) / 1000 + "[s]");
+
+		if (expectedPatternCount > 0) {
+			assertEquals(expectedPatternCount, patterns.size());
+		}
+		LOGGER.info("VERIFY: #patterns of all obtained = " + patterns.size());
+
+		if (patterns.size() < 30) {
+			LOGGER.info(patterns);
+		}
+
 	}
 }

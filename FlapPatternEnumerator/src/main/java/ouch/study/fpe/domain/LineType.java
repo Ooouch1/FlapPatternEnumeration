@@ -7,22 +7,43 @@ public enum LineType {
 	/**
 	 * mountaion fold.
 	 */
-	MOUNTAIN(Color.RED),
+	MOUNTAIN(Color.RED, 1),
 
 	/**
 	 * valley fold.
 	 */
-	VALLEY(Color.BLUE),
+	VALLEY(Color.BLUE, 2),
 
-	EMPTY(null);
+	/**
+	 * no line.
+	 */
+	EMPTY(null, 0);
 
 	/**
 	 * the color for graphic.
 	 */
 	private final Color color;
 
-	private LineType(Color c) {
+	/**
+	 * the bit string for compiling pattern into key.
+	 */
+	private final long bit;
+
+	public static final long BIT_LENGTH = 2;
+	public static final long BIT_MASK = 0x03;
+
+	private LineType(final Color c, final long b) {
 		color = c;
+		bit = b;
+	}
+
+	/**
+	 * 
+	 * @return
+	 *         0x01 for MOUNTAIN, 0x02 for VALLEY, 0x00 for EMPTY
+	 */
+	public long getBit() {
+		return bit;
 	}
 
 	/**

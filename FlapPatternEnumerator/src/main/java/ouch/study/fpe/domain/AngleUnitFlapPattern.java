@@ -22,7 +22,7 @@ public class AngleUnitFlapPattern implements Cloneable, Comparable<AngleUnitFlap
 	 * @param divisionSize
 	 *            angle is defined as k * 360[deg.] / divisionSize.
 	 */
-	public AngleUnitFlapPattern(Integer divisionSize) {
+	public AngleUnitFlapPattern(final Integer divisionSize) {
 		this.divisionSize = divisionSize;
 
 		LineType[] initialValues = new LineType[divisionSize];
@@ -31,7 +31,7 @@ public class AngleUnitFlapPattern implements Cloneable, Comparable<AngleUnitFlap
 		lines = Arrays.asList(initialValues);
 	}
 
-	public AngleUnitFlapPattern(Integer divisionSize, List<LineType> lines) {
+	public AngleUnitFlapPattern(final Integer divisionSize, final List<LineType> lines) {
 		this.divisionSize = divisionSize;
 		this.lines = lines;
 		if (lines.size() != divisionSize) {
@@ -39,7 +39,7 @@ public class AngleUnitFlapPattern implements Cloneable, Comparable<AngleUnitFlap
 		}
 	}
 
-	public void set(int index, LineType type) {
+	public void set(final int index, final LineType type) {
 		lines.set(index, type);
 	}
 
@@ -115,7 +115,7 @@ public class AngleUnitFlapPattern implements Cloneable, Comparable<AngleUnitFlap
 		return -1;
 	}
 
-	public int findLastIndexOf(LineType line) {
+	public int findLastIndexOf(final LineType line) {
 		return lines.lastIndexOf(line);
 	}
 
@@ -144,7 +144,7 @@ public class AngleUnitFlapPattern implements Cloneable, Comparable<AngleUnitFlap
 		}
 	}
 
-	public boolean isEmptyAt(int index) {
+	public boolean isEmptyAt(final int index) {
 		LineType type = lines.get(index);
 		return isEmpty(type);
 	}
@@ -159,57 +159,71 @@ public class AngleUnitFlapPattern implements Cloneable, Comparable<AngleUnitFlap
 		return true;
 	}
 
-	private boolean isEmpty(LineType type) {
+	private boolean isEmpty(final LineType type) {
 		return type == null || type == LineType.EMPTY;
 	}
 
-	/**
-	 * 
-	 * @param pattern
-	 *            pattern to be tested
-	 * @param axisIndex
-	 *            a line index of mirroring center.
-	 * 
-	 * @return true if this instance is a mirrored pattern according to given
-	 *         axis.
-	 */
-	public boolean isMirrorOf(final AngleUnitFlapPattern pattern,
-			final int axisIndex) {
+	// /**
+	// *
+	// * @param pattern
+	// * pattern to be tested
+	// * @param axisIndex
+	// * a line index of mirroring center.
+	// *
+	// * @return true if this instance is a mirrored pattern according to given
+	// * axis.
+	// */
+	// public boolean isMirrorOf(final AngleUnitFlapPattern pattern,
+	// final int axisIndex) {
+	//
+	// if (this.divisionSize != pattern.divisionSize) {
+	// return false;
+	// }
+	//
+	// for (int i = 0; i < divisionSize; i++) {
+	// // rotate the index of axisIndex == 0
+	// int index = rotateIndex(i, axisIndex);
+	// int reversedIndex = rotateIndex(divisionSize - i, axisIndex);
+	//
+	// if (this.lines.get(index) != pattern.lines.get(reversedIndex)) {
+	// return false;
+	// }
+	// }
+	//
+	// return true;
+	// }
 
-		if (this.divisionSize != pattern.divisionSize) {
-			return false;
-		}
+	// /**
+	// * test for each axises.
+	// *
+	// * @param pattern
+	// * expected to be mirror
+	// * @return true if {@link #isMirrorOf(AngleUnitFlapPattern, int)} is true
+	// * for some axis.
+	// */
+	// public boolean isMirrorOf(final AngleUnitFlapPattern pattern) {
+	//
+	// for (int i = 0; i < divisionSize; i++) {
+	// if (this.isMirrorOf(pattern, i)) {
+	// return true;
+	// }
+	// }
+	//
+	// return false;
+	// }
+
+	public AngleUnitFlapPattern createMirroredPattern(final int axisIndex) {
+		AngleUnitFlapPattern mirrored = new AngleUnitFlapPattern(divisionSize);
 
 		for (int i = 0; i < divisionSize; i++) {
-			// rotate the index for the case of axisIndex == 0
+			// rotate the index of axisIndex == 0
 			int index = rotateIndex(i, axisIndex);
 			int reversedIndex = rotateIndex(divisionSize - i, axisIndex);
 
-			if (this.lines.get(index) != pattern.lines.get(reversedIndex)) {
-				return false;
-			}
+			mirrored.set(reversedIndex, this.getAt(index));
 		}
 
-		return true;
-	}
-
-	/**
-	 * test for each axises.
-	 * 
-	 * @param pattern
-	 *            expected to be mirror
-	 * @return true if {@link #isMirrorOf(AngleUnitFlapPattern, int)} is true
-	 *         for some axis.
-	 */
-	public boolean isMirrorOf(final AngleUnitFlapPattern pattern) {
-
-		for (int i = 0; i < divisionSize; i++) {
-			if (this.isMirrorOf(pattern, i)) {
-				return true;
-			}
-		}
-
-		return false;
+		return mirrored;
 	}
 
 	/**
@@ -220,48 +234,58 @@ public class AngleUnitFlapPattern implements Cloneable, Comparable<AngleUnitFlap
 	 *            any integer (both negative and positive)
 	 * @return index + diff taking account of circle loop
 	 */
-	private int rotateIndex(int index, int diff) {
+	private int rotateIndex(final int index, final int diff) {
 		return (index + divisionSize + diff % divisionSize) % divisionSize;
 	}
 
 	/**
 	 * 
-	 * @param pattern
-	 *            base of rotation
-	 * @param diff
-	 *            how much rotated in index circle.
-	 * @return true if this instance is rotation of given pattern with given
-	 *         difference.
+	 * @param n
+	 *            index
+	 * @return n as an index taking account of circle loop
 	 */
-	public boolean isRotationOf(final AngleUnitFlapPattern pattern,
-			final int diff) {
-
-		for (int i = 0; i < divisionSize; i++) {
-			int index = rotateIndex(i, diff);
-			if (lines.get(index) != pattern.lines.get(i)) {
-				return false;
-			}
-		}
-
-		return true;
+	public int asIndex(final long n) {
+		return (int) (n % divisionSize);
 	}
 
-	/**
-	 * 
-	 * @param pattern
-	 * 
-	 * @return true if {@link #isRotationOf(AngleUnitFlapPattern, int)} holds
-	 *         true for some diff.
-	 */
-	public boolean isRotationOf(final AngleUnitFlapPattern pattern) {
-		for (int i = 0; i < divisionSize; i++) {
-			if (isRotationOf(pattern, i)) {
-				return true;
-			}
-		}
-
-		return false;
-	}
+	// /**
+	// *
+	// * @param pattern
+	// * base of rotation
+	// * @param diff
+	// * how much rotated in index circle.
+	// * @return true if this instance is rotation of given pattern with given
+	// * difference.
+	// */
+	// public boolean isRotationOf(final AngleUnitFlapPattern pattern,
+	// final int diff) {
+	//
+	// for (int i = 0; i < divisionSize; i++) {
+	// int index = rotateIndex(i, diff);
+	// if (lines.get(index) != pattern.lines.get(i)) {
+	// return false;
+	// }
+	// }
+	//
+	// return true;
+	// }
+	//
+	// /**
+	// *
+	// * @param pattern
+	// *
+	// * @return true if {@link #isRotationOf(AngleUnitFlapPattern, int)} holds
+	// * true for some diff.
+	// */
+	// public boolean isRotationOf(final AngleUnitFlapPattern pattern) {
+	// for (int i = 0; i < divisionSize; i++) {
+	// if (isRotationOf(pattern, i)) {
+	// return true;
+	// }
+	// }
+	//
+	// return false;
+	// }
 
 	@Override
 	public String toString() {
@@ -269,7 +293,7 @@ public class AngleUnitFlapPattern implements Cloneable, Comparable<AngleUnitFlap
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (!(obj instanceof AngleUnitFlapPattern)) {
 			return false;
 		}
@@ -279,37 +303,8 @@ public class AngleUnitFlapPattern implements Cloneable, Comparable<AngleUnitFlap
 				&& (this.divisionSize == pattern.divisionSize);
 	}
 
-	/**
-	 * draws all lines.
-	 * 
-	 * @param g
-	 *            the place to draw
-	 * @param cx
-	 *            x position of the center
-	 * @param cy
-	 *            y position of the center
-	 * @param length
-	 *            the length of lines.
-	 */
-	public void draw(Graphics2D g, double cx, double cy, double length) {
-		GraphicFactory factory = new GraphicFactory();
-
-		for (int index = 0; index < lines.size(); index++) {
-			if (isEmptyAt(index)) {
-				continue;
-			}
-			LineType type = lines.get(index);
-			RadialLineGraphic lineGraphic = factory.createRadialLine(length, asRadian(index), type);
-			lineGraphic.draw(g, cx, cy);
-		}
-	}
-
-	private double asRadian(int index) {
-		return (((double) index + 1) / divisionSize) * 2 * Math.PI;
-	}
-
 	@Override
-	public int compareTo(AngleUnitFlapPattern o) {
+	public int compareTo(final AngleUnitFlapPattern o) {
 
 		int thisCountLine = this.countLines();
 		int oCountLine = o.countLines();
@@ -344,4 +339,61 @@ public class AngleUnitFlapPattern implements Cloneable, Comparable<AngleUnitFlap
 
 		return count;
 	}
+
+	public int countLines(final LineType t) {
+		int count = 0;
+		for (LineType type : lines) {
+			if (type == t) {
+				count++;
+			}
+		}
+
+		return count;
+	}
+
+	/**
+	 * returns line type at given index taking account of circle loop.
+	 * 
+	 * @param index
+	 * 
+	 * @return
+	 *         line type at the index
+	 */
+	public LineType getAt(final int index) {
+		return lines.get(asIndex(index));
+	}
+
+	// =============================================================================================
+	// Graphic
+	// =============================================================================================
+
+	/**
+	 * draws all lines.
+	 * 
+	 * @param g
+	 *            the place to draw
+	 * @param cx
+	 *            x position of the center
+	 * @param cy
+	 *            y position of the center
+	 * @param length
+	 *            the length of lines.
+	 */
+	public void draw(final Graphics2D g, final double cx, final double cy, final double length) {
+		GraphicFactory factory = new GraphicFactory();
+
+		for (int index = 0; index < lines.size(); index++) {
+			if (isEmptyAt(index)) {
+				continue;
+			}
+			LineType type = lines.get(index);
+			RadialLineGraphic lineGraphic = factory.createRadialLine(length, asRadian(index), type);
+			lineGraphic.draw(g, cx, cy);
+		}
+	}
+
+	private double asRadian(final int index) {
+		return (((double) index + 1) / divisionSize) * 2 * Math.PI;
+	}
+
 }

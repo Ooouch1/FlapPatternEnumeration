@@ -7,9 +7,9 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import javax.swing.JPanel;
 
@@ -35,14 +35,14 @@ public class PaintScreen extends JPanel {
 		this.setBackground(Color.white);
 	}
 
-	public void setPatterns(Set<AngleUnitFlapPattern> p) {
-		this.patterns = new ArrayList<>(p);
+	public void setPatterns(final Collection<AngleUnitFlapPattern> patterns2) {
+		this.patterns = new ArrayList<>(patterns2);
 
 		Collections.sort(patterns);
 
 	}
 
-	public void requestDraw(int page) {
+	public void requestDraw(final int page) {
 		this.page = page;
 
 		LOGGER.debug("#patterns to be drawn " + gridManager.getBoxCount());
@@ -52,7 +52,7 @@ public class PaintScreen extends JPanel {
 	}
 
 	@Override
-	protected void paintComponent(Graphics g) {
+	protected void paintComponent(final Graphics g) {
 		super.paintComponent(g);
 
 		Graphics2D g2 = (Graphics2D) g;
@@ -82,7 +82,7 @@ public class PaintScreen extends JPanel {
 
 	private class OnResized extends ComponentAdapter {
 		@Override
-		public void componentResized(ComponentEvent e) {
+		public void componentResized(final ComponentEvent e) {
 
 			if (patterns == null || patterns.isEmpty()) {
 				return;

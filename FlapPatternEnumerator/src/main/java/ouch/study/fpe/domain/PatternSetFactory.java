@@ -1,14 +1,13 @@
 package ouch.study.fpe.domain;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import oripa.util.collection.Rule;
 import ouch.study.fpe.domain.rule.AlwaysTrue;
-import ouch.study.fpe.domain.rule.OrigamiFoldability;
 
 /**
  * This object generates the all patterns according to given condition.
@@ -20,15 +19,21 @@ import ouch.study.fpe.domain.rule.OrigamiFoldability;
  * 
  */
 public class PatternSetFactory {
-	/** ロガー */
+	/** Logger. */
 	private static final Logger LOGGER = LogManager
 			.getLogger(PatternSetFactory.class);
 
-	private HashSet<AngleUnitFlapPattern> patterns = new HashSet<>();
+	private List<AngleUnitFlapPattern> patterns = new LinkedList<>();
 
 	private final Integer tailIndex;
 
+	@SuppressWarnings("unchecked")
 	private Rule<AngleUnitFlapPattern> acceptablePatternCondition = new AlwaysTrue();
+
+	@SuppressWarnings("unchecked")
+	private Rule<AngleUnitFlapPattern> pruningCondition = new AlwaysTrue().asDenied();
+
+	private int recursionCount = 0;
 
 	/**
 	 * 
@@ -38,16 +43,17 @@ public class PatternSetFactory {
 	 * @param enableFoldabilityTest
 	 *            true if you want to get foldables only.
 	 */
-	@SuppressWarnings("unchecked")
-	public PatternSetFactory(Integer tailIndex, boolean enableFoldabilityTest) {
+	public PatternSetFactory(final Integer tailIndex, final boolean enableFoldabilityTest) {
 		this.tailIndex = tailIndex;
 
 		if (enableFoldabilityTest) {
-			acceptablePatternCondition = new OrigamiFoldability();
+			RuleFactory factory = new RuleFactory();
+			acceptablePatternCondition = factory.createFoldabilityRule();
 		}
 	}
 
 	/**
+	 * More detailed setting is enabled.
 	 * 
 	 * @param tailIndex
 	 *            the index at which this object stops adding.
@@ -55,10 +61,12 @@ public class PatternSetFactory {
 	 *            any {@link Rule} object which describes your preferrable
 	 *            feature.
 	 */
-	public PatternSetFactory(Integer tailIndex,
-			Rule<AngleUnitFlapPattern> acceptablePatternCondition) {
+	public PatternSetFactory(final Integer tailIndex,
+			final Rule<AngleUnitFlapPattern> acceptablePatternCondition,
+			final Rule<AngleUnitFlapPattern> pruningCondition) {
 		this.tailIndex = tailIndex;
 		this.acceptablePatternCondition = acceptablePatternCondition;
+		this.pruningCondition = pruningCondition;
 	}
 
 	/**
@@ -71,10 +79,10 @@ public class PatternSetFactory {
 	 *            the number that additionCount should reaches.
 	 * @return patterns
 	 */
-	public Set<AngleUnitFlapPattern> createPatternsByAddingLineRecursively(
-			AngleUnitFlapPattern seed, LineType typeToBeAdded,
-			int aimedAdditionCount) {
-		patterns = new HashSet<>();
+	public List<AngleUnitFlapPattern> createPatternsByAddingLineRecursively(
+			final AngleUnitFlapPattern seed, final LineType typeToBeAdded,
+			final int aimedAdditionCount) {
+		patterns = new LinkedList<>();
 
 		createPatternsImpl(
 				seed.cloneInstance(), typeToBeAdded, 0, 0,
@@ -97,9 +105,9 @@ public class PatternSetFactory {
 	 * @return
 	 *         patterns that each of them has one more line than given seed.
 	 */
-	public Set<AngleUnitFlapPattern> advance(final AngleUnitFlapPattern seed,
+	public List<AngleUnitFlapPattern> advance(final AngleUnitFlapPattern seed,
 			final int startIndex, final LineType typeToBeAdded) {
-		patterns = new HashSet<>();
+		patterns = new LinkedList<>();
 		createPatternsImpl(
 				seed.cloneInstance(), typeToBeAdded, startIndex, 0, 1);
 		return patterns;
@@ -113,8 +121,8 @@ public class PatternSetFactory {
 	 * @return
 	 *         merged set of advanced patterns for every seeds.
 	 */
-	public Set<AngleUnitFlapPattern> advanceAll(final Set<AngleUnitFlapPattern> seeds, final LineType typeToBeAdded) {
-		patterns = new HashSet<>();
+	public List<AngleUnitFlapPattern> advanceAll(final List<AngleUnitFlapPattern> seeds, final LineType typeToBeAdded) {
+		patterns = new LinkedList<>();
 		for (AngleUnitFlapPattern seed : seeds) {
 			createPatternsImpl(
 					seed.cloneInstance(), typeToBeAdded, seed.findLastIndexOf(typeToBeAdded), 0, 1);
@@ -139,13 +147,20 @@ public class PatternSetFactory {
 	 */
 	private void createPatternsImpl(final AngleUnitFlapPattern seed,
 			final LineType typeToBeAdded, final int lastIndex, final int additionCount,
-			int aimedAdditionCount) {
+			final int aimedAdditionCount) {
+
+		recursionCount++;
+
+		if (acceptablePatternCondition.holds(seed)) {
+			patterns.add(seed.cloneInstance());
+		}
 
 		if (additionCount == aimedAdditionCount) {
-			if (acceptablePatternCondition.holds(seed)) {
-				patterns.add(seed.cloneInstance());
-				return;
-			}
+			return;
+		}
+
+		if (tailIndex - lastIndex < aimedAdditionCount - additionCount) {
+			return;
 		}
 
 		if (lastIndex == tailIndex) {
@@ -157,15 +172,21 @@ public class PatternSetFactory {
 				continue;
 			}
 			seed.set(i, typeToBeAdded);
-			createPatternsImpl(seed, typeToBeAdded, i, additionCount + 1,
-					aimedAdditionCount);
+			if (!pruningCondition.holds(seed)) {
+				createPatternsImpl(seed, typeToBeAdded, i, additionCount + 1,
+						aimedAdditionCount);
+			}
 			seed.set(i, LineType.EMPTY);
 		}
 	}
 
-	private void logDebug(final Set<AngleUnitFlapPattern> patterns) {
-		LOGGER.debug("#patterns = " + patterns.size());
-		LOGGER.debug(patterns);
+	private void logDebug(final List<AngleUnitFlapPattern> patterns) {
+		LOGGER.trace("#patterns = " + patterns.size());
+		LOGGER.trace(patterns);
+	}
+
+	public int getRecursionCount() {
+		return recursionCount;
 	}
 
 }
