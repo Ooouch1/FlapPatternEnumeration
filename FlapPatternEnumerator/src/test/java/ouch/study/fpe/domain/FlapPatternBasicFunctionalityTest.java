@@ -6,7 +6,7 @@ import java.util.HashSet;
 
 import org.junit.Test;
 
-public class FlapPatternBaisicFunctionalityTest {
+public class FlapPatternBasicFunctionalityTest {
 
 	@Test
 	public void testEqualsAndCanBeHashElement() {

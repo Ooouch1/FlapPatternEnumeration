@@ -393,7 +393,7 @@ public class AngleUnitFlapPattern implements Cloneable, Comparable<AngleUnitFlap
 	}
 
 	private double asRadian(final int index) {
-		return (((double) index + 1) / divisionSize) * 2 * Math.PI;
+		return (((double) index) / divisionSize) * 2 * Math.PI;
 	}
 
 }

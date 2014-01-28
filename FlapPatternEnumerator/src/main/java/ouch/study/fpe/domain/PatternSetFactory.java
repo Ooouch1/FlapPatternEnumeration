@@ -138,7 +138,7 @@ public class PatternSetFactory {
 	 *            seed of patterns
 	 * @param typeToBeAdded
 	 *            line type for new lines
-	 * @param lastIndex
+	 * @param indexToAdd
 	 *            index of lastly added line
 	 * @param additionCount
 	 *            the count of added lines
@@ -146,37 +146,45 @@ public class PatternSetFactory {
 	 *            the number that additionCount should reaches.
 	 */
 	private void createPatternsImpl(final AngleUnitFlapPattern seed,
-			final LineType typeToBeAdded, final int lastIndex, final int additionCount,
+			final LineType typeToBeAdded, final int indexToAdd, final int additionCount,
 			final int aimedAdditionCount) {
 
 		recursionCount++;
 
 		if (acceptablePatternCondition.holds(seed)) {
-			patterns.add(seed.cloneInstance());
+			patterns.add(seed);
 		}
 
 		if (additionCount == aimedAdditionCount) {
+			LOGGER.info(seed);
 			return;
 		}
 
-		if (tailIndex - lastIndex < aimedAdditionCount - additionCount) {
+		int remainChances = tailIndex + 1 - indexToAdd;
+		int possibleMaxAdditionCount = additionCount + remainChances;
+		if (possibleMaxAdditionCount < aimedAdditionCount) {
 			return;
 		}
 
-		if (lastIndex == tailIndex) {
+		if (indexToAdd > tailIndex) {
 			return;
 		}
 
-		for (int i = lastIndex + 1; i <= tailIndex; i++) {
+		for (int i = indexToAdd; i <= tailIndex; i++) {
 			if (!seed.isEmptyAt(i)) {
 				continue;
 			}
-			seed.set(i, typeToBeAdded);
-			if (!pruningCondition.holds(seed)) {
-				createPatternsImpl(seed, typeToBeAdded, i, additionCount + 1,
-						aimedAdditionCount);
+			AngleUnitFlapPattern nextSeed = seed.cloneInstance();
+
+			nextSeed.set(i, typeToBeAdded);
+			// seed.set(i, typeToBeAdded);
+			if (pruningCondition.holds(nextSeed)) {
+				continue;
 			}
-			seed.set(i, LineType.EMPTY);
+			createPatternsImpl(nextSeed, typeToBeAdded, i + 1, additionCount + 1,
+					aimedAdditionCount);
+
+			// seed.set(i, LineType.EMPTY);
 		}
 	}
 

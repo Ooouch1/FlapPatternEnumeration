@@ -106,11 +106,13 @@ public class FlapPatternEnumerator {
 
 		Rule<AngleUnitFlapPattern> acceptionRule = ruleFactory
 				.createFoldablilityRuleAsConjunctionable()
-				.addRule(ruleFactory.createAcceptableByLineCount(expectedTotalLineCount)
-				);
+				.addRule(ruleFactory.createAcceptableByLineCount(expectedTotalLineCount))
+				.addRule(ruleFactory.createDuplicationDetector(0).asDenied());
 
 		PatternSetFactory factory = new PatternSetFactory(
-				seed.getTailIndex(), acceptionRule, pruningRule);
+				seed.getTailIndex(), acceptionRule, ruleFactory.createNoPruning());
+
+		LOGGER.info("start adding VALLEY to: " + seed);
 
 		List<AngleUnitFlapPattern> result = factory.createPatternsByAddingLineRecursively(seed,
 				LineType.VALLEY, additonCount);
@@ -123,7 +125,7 @@ public class FlapPatternEnumerator {
 	/**
 	 * 
 	 * @param seed
-	 *            seed of new patterns
+	 *            empty seed of new patterns
 	 * @param maxMountainCount
 	 *            ammount of new lines
 	 * 
@@ -144,8 +146,9 @@ public class FlapPatternEnumerator {
 		PatternSetFactory factory = new PatternSetFactory(
 				seed.getTailIndex(), acceptionRule, pruningRule);
 
+		seed.set(0, LineType.MOUNTAIN);
 		List<AngleUnitFlapPattern> result = factory.createPatternsByAddingLineRecursively(seed,
-				LineType.MOUNTAIN, maxMountainCount);
+				LineType.MOUNTAIN, maxMountainCount - 1);
 
 		recursionCount += factory.getRecursionCount();
 

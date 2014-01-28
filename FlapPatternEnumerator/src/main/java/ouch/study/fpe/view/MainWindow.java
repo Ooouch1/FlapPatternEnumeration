@@ -3,6 +3,8 @@ package ouch.study.fpe.view;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Collection;
 
 import javax.swing.BoxLayout;
@@ -15,10 +17,15 @@ import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.border.BevelBorder;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
 import ouch.study.fpe.controller.RunEnumeration;
 import ouch.study.fpe.domain.AngleUnitFlapPattern;
 
 public class MainWindow extends JFrame {
+	/** Logger. */
+	private static final Logger LOGGER = LogManager.getLogger(MainWindow.class);
 
 	private final JButton executionButton = new JButton("run");
 	private final PaintScreen paintScreen = new PaintScreen();
@@ -80,6 +87,7 @@ public class MainWindow extends JFrame {
 
 	private void configureListeners() {
 		executionButton.addActionListener(new OnClickExecutionButton());
+		paintScreen.addMouseListener(new OnMouseClicked());
 	}
 
 	// ==========================================================================
@@ -108,6 +116,39 @@ public class MainWindow extends JFrame {
 			} catch (IllegalArgumentException ex) {
 				JOptionPane.showMessageDialog(MainWindow.this, ex);
 			}
+
 		}
 	}
+
+	private class OnMouseClicked extends MouseAdapter {
+		@Override
+		public void mouseClicked(final MouseEvent e) {
+			if (e.getX() > paintScreen.getWidth() / 2) {
+				paintScreen.requestDrawNextPage();
+			} else {
+				paintScreen.requestDrawPreviousPage();
+			}
+		}
+	}
+
+	// private class OnKeyPressed extends KeyAdapter {
+	// @Override
+	// public void keyPressed(final KeyEvent e) {
+	// int keyCode = e.getKeyCode();
+	//
+	// LOGGER.info("key " + keyCode + " pressed.");
+	//
+	// switch (keyCode) {
+	// case KeyEvent.VK_LEFT:
+	// case KeyEvent.VK_UP:
+	//
+	// paintScreen.requestDrawPreviousPage();
+	// break;
+	// case KeyEvent.VK_RIGHT:
+	// case KeyEvent.VK_DOWN:
+	// paintScreen.requestDrawNextPage();
+	// break;
+	// }
+	// }
+	// }
 }
