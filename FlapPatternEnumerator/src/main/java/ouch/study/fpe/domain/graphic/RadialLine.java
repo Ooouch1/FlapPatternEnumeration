@@ -4,7 +4,6 @@ import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
 
 import ouch.study.fpe.domain.LineType;
-import ouch.study.fpe.domain.RadialLineGraphic;
 
 /**
  * radial line to draw flap pattern.

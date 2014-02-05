@@ -1,15 +1,19 @@
-package ouch.study.fpe.domain;
+package ouch.study.fpe.domain.bf;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-public class PatternSetFactoryTestUsing90Degrees {
+import ouch.study.fpe.domain.AngleUnitFlapPattern;
+import ouch.study.fpe.domain.LineType;
+import ouch.study.fpe.domain.bf.BruteForcePatternSetFactory;
+
+public class BruteForcePatternSetFactoryTestUsing90Degrees {
 	private static final Integer DIVISION_SIZE = 4;
 
 	@Test
 	public void test() {
-		PatternSetFactory factory = new PatternSetFactory(DIVISION_SIZE - 1,
+		BruteForcePatternSetFactory factory = new BruteForcePatternSetFactory(DIVISION_SIZE - 1,
 				false);
 
 		AngleUnitFlapPattern seed = new AngleUnitFlapPattern(DIVISION_SIZE);

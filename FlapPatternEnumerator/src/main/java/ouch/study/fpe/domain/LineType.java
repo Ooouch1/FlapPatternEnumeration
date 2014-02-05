@@ -7,12 +7,12 @@ public enum LineType {
 	/**
 	 * mountaion fold.
 	 */
-	MOUNTAIN(Color.RED, 1),
+	MOUNTAIN(Color.BLUE, 1),
 
 	/**
 	 * valley fold.
 	 */
-	VALLEY(Color.BLUE, 2),
+	VALLEY(Color.RED, 2),
 
 	/**
 	 * no line.
@@ -35,6 +35,12 @@ public enum LineType {
 	private LineType(final Color c, final long b) {
 		color = c;
 		bit = b;
+	}
+
+	public LineType nextType() {
+		LineType[] values = LineType.values();
+
+		return values[(int) ((this.bit + 1) % values.length)];
 	}
 
 	/**

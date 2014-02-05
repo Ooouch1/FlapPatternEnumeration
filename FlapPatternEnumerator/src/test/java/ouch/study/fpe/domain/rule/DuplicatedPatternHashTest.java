@@ -1,4 +1,4 @@
-package ouch.study.fpe.domain;
+package ouch.study.fpe.domain.rule;
 
 import static org.junit.Assert.*;
 
@@ -6,6 +6,9 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
+import ouch.study.fpe.domain.AngleUnitFlapPattern;
+import ouch.study.fpe.domain.LineType;
+import ouch.study.fpe.domain.PatternFactoryForTest;
 import ouch.study.fpe.domain.rule.DuplicatedPatternHash;
 
 /**

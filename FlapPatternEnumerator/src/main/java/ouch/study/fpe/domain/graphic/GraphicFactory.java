@@ -1,6 +1,6 @@
-package ouch.study.fpe.domain;
+package ouch.study.fpe.domain.graphic;
 
-import ouch.study.fpe.domain.graphic.RadialLine;
+import ouch.study.fpe.domain.LineType;
 
 /**
  * creates objects for drawing.

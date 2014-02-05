@@ -1,6 +1,5 @@
 package ouch.study.fpe.domain;
 
-import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -40,7 +39,7 @@ public class AngleUnitFlapPattern implements Cloneable, Comparable<AngleUnitFlap
 	}
 
 	public void set(final int index, final LineType type) {
-		lines.set(index, type);
+		lines.set(asIndex(index), type);
 	}
 
 	public List<LineType> getLines() {
@@ -145,7 +144,7 @@ public class AngleUnitFlapPattern implements Cloneable, Comparable<AngleUnitFlap
 	}
 
 	public boolean isEmptyAt(final int index) {
-		LineType type = lines.get(index);
+		LineType type = getAt(index);
 		return isEmpty(type);
 	}
 
@@ -162,55 +161,6 @@ public class AngleUnitFlapPattern implements Cloneable, Comparable<AngleUnitFlap
 	private boolean isEmpty(final LineType type) {
 		return type == null || type == LineType.EMPTY;
 	}
-
-	// /**
-	// *
-	// * @param pattern
-	// * pattern to be tested
-	// * @param axisIndex
-	// * a line index of mirroring center.
-	// *
-	// * @return true if this instance is a mirrored pattern according to given
-	// * axis.
-	// */
-	// public boolean isMirrorOf(final AngleUnitFlapPattern pattern,
-	// final int axisIndex) {
-	//
-	// if (this.divisionSize != pattern.divisionSize) {
-	// return false;
-	// }
-	//
-	// for (int i = 0; i < divisionSize; i++) {
-	// // rotate the index of axisIndex == 0
-	// int index = rotateIndex(i, axisIndex);
-	// int reversedIndex = rotateIndex(divisionSize - i, axisIndex);
-	//
-	// if (this.lines.get(index) != pattern.lines.get(reversedIndex)) {
-	// return false;
-	// }
-	// }
-	//
-	// return true;
-	// }
-
-	// /**
-	// * test for each axises.
-	// *
-	// * @param pattern
-	// * expected to be mirror
-	// * @return true if {@link #isMirrorOf(AngleUnitFlapPattern, int)} is true
-	// * for some axis.
-	// */
-	// public boolean isMirrorOf(final AngleUnitFlapPattern pattern) {
-	//
-	// for (int i = 0; i < divisionSize; i++) {
-	// if (this.isMirrorOf(pattern, i)) {
-	// return true;
-	// }
-	// }
-	//
-	// return false;
-	// }
 
 	public AngleUnitFlapPattern createMirroredPattern(final int axisIndex) {
 		AngleUnitFlapPattern mirrored = new AngleUnitFlapPattern(divisionSize);
@@ -244,48 +194,16 @@ public class AngleUnitFlapPattern implements Cloneable, Comparable<AngleUnitFlap
 	 *            index
 	 * @return n as an index taking account of circle loop
 	 */
-	public int asIndex(final long n) {
-		return (int) (n % divisionSize);
-	}
+	public int asIndex(final int n) {
 
-	// /**
-	// *
-	// * @param pattern
-	// * base of rotation
-	// * @param diff
-	// * how much rotated in index circle.
-	// * @return true if this instance is rotation of given pattern with given
-	// * difference.
-	// */
-	// public boolean isRotationOf(final AngleUnitFlapPattern pattern,
-	// final int diff) {
-	//
-	// for (int i = 0; i < divisionSize; i++) {
-	// int index = rotateIndex(i, diff);
-	// if (lines.get(index) != pattern.lines.get(i)) {
-	// return false;
-	// }
-	// }
-	//
-	// return true;
-	// }
-	//
-	// /**
-	// *
-	// * @param pattern
-	// *
-	// * @return true if {@link #isRotationOf(AngleUnitFlapPattern, int)} holds
-	// * true for some diff.
-	// */
-	// public boolean isRotationOf(final AngleUnitFlapPattern pattern) {
-	// for (int i = 0; i < divisionSize; i++) {
-	// if (isRotationOf(pattern, i)) {
-	// return true;
-	// }
-	// }
-	//
-	// return false;
-	// }
+		int index = n % divisionSize;
+
+		if (index < 0) {
+			return divisionSize + index;
+		}
+
+		return index;
+	}
 
 	@Override
 	public String toString() {
@@ -360,40 +278,8 @@ public class AngleUnitFlapPattern implements Cloneable, Comparable<AngleUnitFlap
 	 *         line type at the index
 	 */
 	public LineType getAt(final int index) {
+
 		return lines.get(asIndex(index));
-	}
-
-	// =============================================================================================
-	// Graphic
-	// =============================================================================================
-
-	/**
-	 * draws all lines.
-	 * 
-	 * @param g
-	 *            the place to draw
-	 * @param cx
-	 *            x position of the center
-	 * @param cy
-	 *            y position of the center
-	 * @param length
-	 *            the length of lines.
-	 */
-	public void draw(final Graphics2D g, final double cx, final double cy, final double length) {
-		GraphicFactory factory = new GraphicFactory();
-
-		for (int index = 0; index < lines.size(); index++) {
-			if (isEmptyAt(index)) {
-				continue;
-			}
-			LineType type = lines.get(index);
-			RadialLineGraphic lineGraphic = factory.createRadialLine(length, asRadian(index), type);
-			lineGraphic.draw(g, cx, cy);
-		}
-	}
-
-	private double asRadian(final int index) {
-		return (((double) index) / divisionSize) * 2 * Math.PI;
 	}
 
 }

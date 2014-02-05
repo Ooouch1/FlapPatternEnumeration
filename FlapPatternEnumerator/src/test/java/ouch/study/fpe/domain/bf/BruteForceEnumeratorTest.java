@@ -1,4 +1,4 @@
-package ouch.study.fpe.domain;
+package ouch.study.fpe.domain.bf;
 
 import static org.junit.Assert.*;
 
@@ -8,10 +8,13 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
-public class EnumeratorTest {
+import ouch.study.fpe.domain.AngleUnitFlapPattern;
+import ouch.study.fpe.domain.bf.BruteForceFlapPatternEnumerator;
+
+public class BruteForceEnumeratorTest {
 	/** Logger. */
 	private static final Logger LOGGER = LogManager
-			.getLogger(EnumeratorTest.class);
+			.getLogger(BruteForceEnumeratorTest.class);
 
 	@Test
 	public void test90Degrees() {
@@ -32,7 +35,7 @@ public class EnumeratorTest {
 
 	private void runEnumeration(final int divisionSize, final int expectedPatternCount) {
 		LOGGER.debug("start " + 360.0 / divisionSize + " degrees test");
-		FlapPatternEnumerator enumerator = new FlapPatternEnumerator();
+		BruteForceFlapPatternEnumerator enumerator = new BruteForceFlapPatternEnumerator();
 
 		long startMillis = System.currentTimeMillis();
 

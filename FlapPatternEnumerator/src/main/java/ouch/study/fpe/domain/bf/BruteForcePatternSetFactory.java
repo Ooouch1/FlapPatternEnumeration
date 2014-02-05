@@ -1,4 +1,4 @@
-package ouch.study.fpe.domain;
+package ouch.study.fpe.domain.bf;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -7,6 +7,9 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import oripa.util.collection.Rule;
+import ouch.study.fpe.domain.AngleUnitFlapPattern;
+import ouch.study.fpe.domain.LineType;
+import ouch.study.fpe.domain.RuleFactory;
 import ouch.study.fpe.domain.rule.AlwaysTrue;
 
 /**
@@ -18,10 +21,10 @@ import ouch.study.fpe.domain.rule.AlwaysTrue;
  * @author Koji
  * 
  */
-public class PatternSetFactory {
+public class BruteForcePatternSetFactory {
 	/** Logger. */
 	private static final Logger LOGGER = LogManager
-			.getLogger(PatternSetFactory.class);
+			.getLogger(BruteForcePatternSetFactory.class);
 
 	private List<AngleUnitFlapPattern> patterns = new LinkedList<>();
 
@@ -43,7 +46,7 @@ public class PatternSetFactory {
 	 * @param enableFoldabilityTest
 	 *            true if you want to get foldables only.
 	 */
-	public PatternSetFactory(final Integer tailIndex, final boolean enableFoldabilityTest) {
+	public BruteForcePatternSetFactory(final Integer tailIndex, final boolean enableFoldabilityTest) {
 		this.tailIndex = tailIndex;
 
 		if (enableFoldabilityTest) {
@@ -61,7 +64,7 @@ public class PatternSetFactory {
 	 *            any {@link Rule} object which describes your preferrable
 	 *            feature.
 	 */
-	public PatternSetFactory(final Integer tailIndex,
+	public BruteForcePatternSetFactory(final Integer tailIndex,
 			final Rule<AngleUnitFlapPattern> acceptablePatternCondition,
 			final Rule<AngleUnitFlapPattern> pruningCondition) {
 		this.tailIndex = tailIndex;
@@ -152,11 +155,11 @@ public class PatternSetFactory {
 		recursionCount++;
 
 		if (acceptablePatternCondition.holds(seed)) {
-			patterns.add(seed);
+			patterns.add(seed.cloneInstance());
 		}
 
 		if (additionCount == aimedAdditionCount) {
-			LOGGER.info(seed);
+			LOGGER.debug(seed);
 			return;
 		}
 
@@ -174,17 +177,14 @@ public class PatternSetFactory {
 			if (!seed.isEmptyAt(i)) {
 				continue;
 			}
-			AngleUnitFlapPattern nextSeed = seed.cloneInstance();
 
-			nextSeed.set(i, typeToBeAdded);
-			// seed.set(i, typeToBeAdded);
-			if (pruningCondition.holds(nextSeed)) {
-				continue;
+			seed.set(i, typeToBeAdded);
+			if (!pruningCondition.holds(seed)) {
+				createPatternsImpl(seed, typeToBeAdded, i + 1, additionCount + 1,
+						aimedAdditionCount);
 			}
-			createPatternsImpl(nextSeed, typeToBeAdded, i + 1, additionCount + 1,
-					aimedAdditionCount);
 
-			// seed.set(i, LineType.EMPTY);
+			seed.set(i, LineType.EMPTY);
 		}
 	}
 

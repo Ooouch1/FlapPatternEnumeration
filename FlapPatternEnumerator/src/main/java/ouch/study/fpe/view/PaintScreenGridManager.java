@@ -42,7 +42,7 @@ public class PaintScreenGridManager {
 	 * @param c
 	 *            ammount of columns
 	 */
-	public void changeColumnSize(double c) {
+	public void changeColumnSize(final double c) {
 		if (columnSize == c) {
 			return;
 		}
@@ -63,7 +63,7 @@ public class PaintScreenGridManager {
 	 * @param h
 	 *            height of the area for whole of grids
 	 */
-	public void update(double w, double h) {
+	public void update(final double w, final double h) {
 		width = w;
 		height = h;
 		LOGGER.debug("panel width: " + width);
@@ -114,6 +114,20 @@ public class PaintScreenGridManager {
 			}
 		}
 		return boxes;
+	}
+
+	public int getIndexAt(final double x, final double y) {
+		int i = 0;
+		for (Rectangle2D box : boxes) {
+			// LOGGER.debug("point x:" + x + ",y:" + y + " " + box);
+
+			if (box.contains(x, y)) {
+				return i;
+			}
+			i++;
+		}
+
+		return -1;
 	}
 
 }

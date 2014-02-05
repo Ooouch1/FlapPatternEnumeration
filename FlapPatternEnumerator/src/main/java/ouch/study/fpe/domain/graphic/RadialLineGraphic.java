@@ -1,4 +1,4 @@
-package ouch.study.fpe.domain;
+package ouch.study.fpe.domain.graphic;
 
 import java.awt.Graphics2D;
 

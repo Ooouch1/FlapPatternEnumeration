@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import ouch.study.fpe.controller.FlapPatternsSettable;
 import ouch.study.fpe.domain.AngleUnitFlapPattern;
 
 /**
@@ -25,7 +26,7 @@ import ouch.study.fpe.domain.AngleUnitFlapPattern;
  * @author Koji
  * 
  */
-public class PaintScreen extends JPanel {
+public class PaintScreen extends JPanel implements ScreenWithPages, FlapPatternsSettable {
 
 	/** Logger. */
 	private static final Logger LOGGER = LogManager.getLogger(PaintScreen.class);
@@ -39,24 +40,33 @@ public class PaintScreen extends JPanel {
 
 	private final PaintScreenGridManager gridManager = new PaintScreenGridManager(this.getWidth(), this.getHeight());
 
+	private int whiteSpaceGap;
+
 	/**
 	 * Initialized background by white.
 	 */
-	public PaintScreen() {
+	public PaintScreen(final int whiteSpaceGap) {
 
 		addComponentListener(new OnResized());
+		// addMouseListener(new OnMouseClicked());
 
 		this.setBackground(Color.white);
+
+		this.whiteSpaceGap = whiteSpaceGap;
 	}
 
 	/**
 	 * Receives patterns.
 	 * 
-	 * @param patterns2
+	 * @param patternsToShow
+	 *            the patterns to show
 	 */
-	public void setPatterns(
+	@Override
+	public void setFlapPatterns(
 			final Collection<AngleUnitFlapPattern> patternsToShow) {
 		patterns = new ArrayList<>(patternsToShow);
+
+		requestDraw(0);
 
 	}
 
@@ -73,12 +83,7 @@ public class PaintScreen extends JPanel {
 		Collections.sort(patterns, cmp);
 	}
 
-	/**
-	 * Suggests drawing patterns.
-	 * 
-	 * @param page
-	 *            indicates which sub-sequence of patterns to be drawn..
-	 */
+	@Override
 	public void requestDraw(final int page) {
 		this.page = page;
 
@@ -88,6 +93,12 @@ public class PaintScreen extends JPanel {
 		repaint();
 	}
 
+	/*
+	 * (非 Javadoc)
+	 * 
+	 * @see ouch.study.fpe.view.HasPages#requestDrawNextPage()
+	 */
+	@Override
 	public void requestDrawNextPage() {
 		if (firstIndexOnPage(page) >= patterns.size()) {
 			return;
@@ -96,6 +107,12 @@ public class PaintScreen extends JPanel {
 		requestDraw(page + 1);
 	}
 
+	/*
+	 * (非 Javadoc)
+	 * 
+	 * @see ouch.study.fpe.view.HasPages#requestDrawPreviousPage()
+	 */
+	@Override
 	public void requestDrawPreviousPage() {
 		if (page <= 0) {
 			return;
@@ -129,9 +146,9 @@ public class PaintScreen extends JPanel {
 				LOGGER.debug("draw " + boxIndex + " " + pattern + " @ " + box);
 			}
 
-			PatternInsideBoxDrawer drawer = new PatternInsideBoxDrawer();
+			PatternInsideBoxDrawer drawer = new PatternInsideBoxDrawer(whiteSpaceGap);
 
-			drawer.drawIndex(g2, boxIndex, box);
+			drawer.drawIndex(g2, getPatternIndexAt(page, boxIndex), box);
 			drawer.drawPattern(g2, pattern, box);
 		}
 
@@ -149,11 +166,19 @@ public class PaintScreen extends JPanel {
 	 * @throws IndexOutOfBoundsException
 	 *             exceeds patterns list.
 	 */
-	private AngleUnitFlapPattern getPatternAt(final int page, final int boxIndex) {
+	public AngleUnitFlapPattern getPatternAt(final int page, final int boxIndex) {
+		return patterns.get(getPatternIndexAt(page, boxIndex));
+	}
+
+	public Integer getPatternIndexAt(final int page, final int boxIndex) {
 		final int startIndex = firstIndexOnPage(page);
 		int patternIndex = startIndex + boxIndex;
 
-		return patterns.get(patternIndex);
+		return patternIndex;
+	}
+
+	public int getPage() {
+		return page;
 	}
 
 	private int firstIndexOnPage(final int page) {
@@ -178,6 +203,16 @@ public class PaintScreen extends JPanel {
 			}
 			requestDraw(page);
 		}
+	}
+
+	public PaintScreenGridManager getGridManager() {
+		return gridManager;
+	}
+
+	@Override
+	public int getScreenWidth() {
+		// TODO 自動生成されたメソッド・スタブ
+		return super.getWidth();
 	}
 
 }
