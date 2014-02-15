@@ -197,6 +197,9 @@ public class MainWindowManager implements FlapPatternsSettable {
 		return pieces;
 	}
 
+	/**
+	 * receives pieces for puzzle mode.
+	 */
 	@Override
 	public void setFlapPatterns(final Collection<AngleUnitFlapPattern> patterns) {
 		pieces = patterns;

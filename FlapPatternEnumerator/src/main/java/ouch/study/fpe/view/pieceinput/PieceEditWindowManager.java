@@ -2,17 +2,22 @@ package ouch.study.fpe.view.pieceinput;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 
 import ouch.study.fpe.controller.FlapPatternsSettable;
 import ouch.study.fpe.controller.IntegerGettable;
+import ouch.study.fpe.domain.AngleUnitFlapPattern;
 import ouch.study.fpe.view.ChangeScreenPageOnMouseClicked;
 import ouch.study.fpe.view.PaintScreen;
 
 public class PieceEditWindowManager {
-	private final PieceEditWindow window = new PieceEditWindow();
+	private PieceEditWindow window;
 
 	private final int clickableRange = 20;
 
@@ -21,11 +26,13 @@ public class PieceEditWindowManager {
 	private final PaintScreen pieceInputScreen = new PaintScreen(clickableRange);
 	private final JButton applyButton = new JButton("Done");
 
-	private int divisionSize;
-	private FlapPatternsSettable patternHolder;
+	private final JCheckBox useDual = new JCheckBox("use dual patt.");
 
-	public PieceEditWindowManager(final FlapPatternsSettable patternHolder, final IntegerGettable divisionSizeHolder) {
-		this.patternHolder = patternHolder;
+	private int divisionSize;
+	private FlapPatternsSettable pieceHolder;
+
+	public PieceEditWindowManager(final FlapPatternsSettable pieceHolder, final IntegerGettable divisionSizeHolder) {
+		this.pieceHolder = pieceHolder;
 		this.divisionSize = divisionSizeHolder.getInteger();
 		configureComponentActions();
 	}
@@ -38,8 +45,15 @@ public class PieceEditWindowManager {
 	}
 
 	public JFrame getView() {
+
+		if (window != null) {
+			return window;
+		}
+
+		window = new PieceEditWindow();
 		window.setPaintScreen(pieceInputScreen);
 		window.setApplyButton(applyButton);
+		window.setDualPatternCheckBox(useDual);
 
 		window.configureViewElementsLayout();
 
@@ -49,10 +63,25 @@ public class PieceEditWindowManager {
 	private class OnClickApplyButton implements ActionListener {
 		@Override
 		public void actionPerformed(final ActionEvent e) {
-			patternHolder.setFlapPatterns(pieceInputController.getPatterns());
+			List<AngleUnitFlapPattern> patterns = pieceInputController.getPatterns();
+			if (useDual.isSelected()) {
+				patterns.addAll(createDuals(patterns));
+			}
+
+			pieceHolder.setFlapPatterns(patterns);
 			window.setVisible(false);
 			window.dispose();
 		}
+	}
+
+	private Collection<AngleUnitFlapPattern> createDuals(final Collection<AngleUnitFlapPattern> patterns) {
+		LinkedList<AngleUnitFlapPattern> duals = new LinkedList<>();
+
+		for (AngleUnitFlapPattern pattern : patterns) {
+			duals.add(pattern.createDual());
+		}
+
+		return duals;
 	}
 
 }

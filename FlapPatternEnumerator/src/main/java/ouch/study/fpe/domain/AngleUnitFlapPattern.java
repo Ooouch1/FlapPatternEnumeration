@@ -282,4 +282,14 @@ public class AngleUnitFlapPattern implements Cloneable, Comparable<AngleUnitFlap
 		return lines.get(asIndex(index));
 	}
 
+	public AngleUnitFlapPattern createDual() {
+		AngleUnitFlapPattern dual = cloneInstance();
+
+		for (int i = 0; i < getDivisionSize(); i++) {
+			dual.set(i, getAt(i).getDualType());
+		}
+
+		return dual;
+	}
+
 }

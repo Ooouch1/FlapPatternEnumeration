@@ -60,6 +60,17 @@ public enum LineType {
 		return color;
 	}
 
+	public LineType getDualType() {
+		switch (this) {
+		case MOUNTAIN:
+			return LineType.VALLEY;
+		case VALLEY:
+			return LineType.MOUNTAIN;
+		default:
+			return this;
+		}
+	}
+
 	// /**
 	// * MOUNTAIN < VALLEY < null
 	// * @author Koji

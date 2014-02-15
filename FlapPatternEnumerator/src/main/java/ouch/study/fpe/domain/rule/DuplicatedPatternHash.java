@@ -95,7 +95,8 @@ public class DuplicatedPatternHash extends AbstractRule<AngleUnitFlapPattern> {
 			bitRotated = bitRotated.createBitRotatedOneAngleUnit();
 
 			// assuming head index is always same.
-			// that means, the same line should always be at the head index.
+			// that means, the same type line should always be at the head
+			// index.
 			if (pattern.getAt(headIndex) == pattern.getAt(headIndex + i)) {
 				put(bitRotated);
 			}

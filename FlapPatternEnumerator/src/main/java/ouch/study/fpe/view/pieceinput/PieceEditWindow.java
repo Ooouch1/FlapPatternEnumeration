@@ -3,6 +3,7 @@ package ouch.study.fpe.view.pieceinput;
 import java.awt.Container;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.SpringLayout;
 
@@ -12,16 +13,19 @@ public class PieceEditWindow extends JFrame {
 
 	private PaintScreen paintScreen;
 	private JButton applyButton;
+	private JCheckBox useDual;
 
 	void configureViewElementsLayout() {
-		this.setSize(400, 300);
+		this.setSize(600, 400);
 
-		SpringLayout layout = new SpringLayout();
 		// example: layout.putConstraint(SpringLayout.NORTH, button1, 10,
 		// SpringLayout.NORTH, p);
 
+		SpringLayout layout = new SpringLayout();
 		layout.putConstraint(SpringLayout.WEST, applyButton, 10,
 				SpringLayout.WEST, getContentPane());
+		layout.putConstraint(SpringLayout.NORTH, useDual, 10,
+				SpringLayout.SOUTH, applyButton);
 
 		// configure paint screen layout: put it on right widely,
 		layout.putConstraint(SpringLayout.WEST, paintScreen, 10,
@@ -38,6 +42,7 @@ public class PieceEditWindow extends JFrame {
 		Container contentPane = getContentPane();
 		contentPane.add(paintScreen);
 		contentPane.add(applyButton);
+		contentPane.add(useDual);
 
 	}
 
@@ -47,5 +52,9 @@ public class PieceEditWindow extends JFrame {
 
 	void setApplyButton(final JButton b) {
 		applyButton = b;
+	}
+
+	void setDualPatternCheckBox(final JCheckBox c) {
+		useDual = c;
 	}
 }

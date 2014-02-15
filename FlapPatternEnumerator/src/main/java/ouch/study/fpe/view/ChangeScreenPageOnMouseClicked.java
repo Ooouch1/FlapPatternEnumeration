@@ -3,12 +3,20 @@ package ouch.study.fpe.view;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.SwingUtilities;
+
 public class ChangeScreenPageOnMouseClicked extends MouseAdapter {
 
 	final ScreenWithPages screen;
 
 	final double clickableRange;
 
+	/**
+	 * 
+	 * @param obj
+	 * @param clickableRange
+	 *            distance from left or right edge
+	 */
 	public ChangeScreenPageOnMouseClicked(final ScreenWithPages obj, final double clickableRange) {
 		screen = obj;
 		this.clickableRange = clickableRange;
@@ -16,6 +24,11 @@ public class ChangeScreenPageOnMouseClicked extends MouseAdapter {
 
 	@Override
 	public void mouseClicked(final MouseEvent e) {
+
+		if (SwingUtilities.isRightMouseButton(e)) {
+			return;
+		}
+
 		if (isInLeftRange(e.getX())) {
 			screen.requestDrawPreviousPage();
 		} else if (isInRightRange(e.getX())) {
