@@ -8,12 +8,12 @@ import ouch.study.fpe.domain.EnumeratorFatory;
 import ouch.study.fpe.domain.FlapPatternEnumerator;
 import ouch.study.fpe.domain.LineType;
 
-public class BruteForceEnumerationRunner implements
-		EnumerationRunner {
+public class PuzzlingEnumerationRunner implements EnumerationRunner {
+
 	private final IntegerGettable divisionSizeHolder;
 	private final FlapPatternsSettable patternHolder;
 
-	public BruteForceEnumerationRunner(final IntegerGettable divisionSizeHolder,
+	public PuzzlingEnumerationRunner(final IntegerGettable divisionSizeHolder,
 			final FlapPatternsSettable patternHolder) {
 		this.divisionSizeHolder = divisionSizeHolder;
 		this.patternHolder = patternHolder;
@@ -29,7 +29,7 @@ public class BruteForceEnumerationRunner implements
 	public Collection<AngleUnitFlapPattern> run(final Collection<List<LineType>> elements) {
 		EnumeratorFatory factory = new EnumeratorFatory();
 
-		FlapPatternEnumerator enumerator = factory.createBruteForceEnumerator();
+		FlapPatternEnumerator enumerator = factory.createPuzzlingEnumerator();
 
 		Collection<AngleUnitFlapPattern> result = enumerator.enumerateUniquePatterns(divisionSizeHolder.getInteger(),
 				elements);
@@ -38,4 +38,5 @@ public class BruteForceEnumerationRunner implements
 
 		return result;
 	}
+
 }

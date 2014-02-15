@@ -88,15 +88,15 @@ public class DuplicatedPatternHash extends AbstractRule<AngleUnitFlapPattern> {
 
 	private void storeRotations(final PatternHashElement element, final int rotationCount) {
 		PatternHashElement bitRotated = element.cloneInstance();
+		AngleUnitFlapPattern pattern = element.getPattern();
+
 		for (int i = 1; i < rotationCount; i++) {
+			// create lotated pattern
+			bitRotated = bitRotated.createBitRotatedOneAngleUnit();
 
 			// assuming head index is always same.
 			// that means, the same line should always be at the head index.
-			AngleUnitFlapPattern pattern = element.getPattern();
 			if (pattern.getAt(headIndex) == pattern.getAt(headIndex + i)) {
-				// create lotated pattern
-				bitRotated = bitRotated.createBitRotatedOneAngleUnit();
-
 				put(bitRotated);
 			}
 		}

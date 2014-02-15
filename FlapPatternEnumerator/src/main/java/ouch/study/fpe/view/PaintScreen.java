@@ -100,11 +100,12 @@ public class PaintScreen extends JPanel implements ScreenWithPages, FlapPatterns
 	 */
 	@Override
 	public void requestDrawNextPage() {
-		if (firstIndexOnPage(page) >= patterns.size()) {
+		int nextPage = page + 1;
+		if (firstIndexOnPage(nextPage) >= patterns.size()) {
 			return;
 		}
 
-		requestDraw(page + 1);
+		requestDraw(nextPage);
 	}
 
 	/*
@@ -114,11 +115,12 @@ public class PaintScreen extends JPanel implements ScreenWithPages, FlapPatterns
 	 */
 	@Override
 	public void requestDrawPreviousPage() {
-		if (page <= 0) {
+		int prevPage = page - 1;
+		if (prevPage < 0) {
 			return;
 		}
 
-		requestDraw(page - 1);
+		requestDraw(prevPage);
 	}
 
 	/**

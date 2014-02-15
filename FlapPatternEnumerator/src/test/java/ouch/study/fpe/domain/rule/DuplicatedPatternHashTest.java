@@ -9,7 +9,6 @@ import org.junit.Test;
 import ouch.study.fpe.domain.AngleUnitFlapPattern;
 import ouch.study.fpe.domain.LineType;
 import ouch.study.fpe.domain.PatternFactoryForTest;
-import ouch.study.fpe.domain.rule.DuplicatedPatternHash;
 
 /**
  * tests that ensures {@link DuplicatedPatternHash} finds the duplications of

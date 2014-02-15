@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.junit.Before;
 import org.junit.Test;
 
 import ouch.study.fpe.domain.AngleUnitFlapPattern;
@@ -23,11 +24,24 @@ public class PuzzlingPatternSetFactoryTest {
 	/** Logger. */
 	private static final Logger LOGGER = LogManager.getLogger(PuzzlingPatternSetFactoryTest.class);
 
-	@Test
-	public void testVMVOnly() {
+	/** test's target. */
+	private PuzzlingFlapPatternSetFactory setFactory = new PuzzlingFlapPatternSetFactory(
+			ruleFactory.createAlwaysAcceptable(), ruleFactory.createNoPruning());
 
-		PuzzlingFlapPatternSetFactory setFactory = new PuzzlingFlapPatternSetFactory(
+	/**
+	 * clear target.
+	 */
+	@Before
+	public final void initialize() {
+		setFactory = new PuzzlingFlapPatternSetFactory(
 				ruleFactory.createAlwaysAcceptable(), ruleFactory.createNoPruning());
+	}
+
+	/**
+	 * 
+	 */
+	@Test
+	public final void testVMVOnly() {
 
 		List<AngleUnitFlapPattern> patterns =
 				setFactory.createPatterns(DIVISION_SIZE, createVMVPiece());
@@ -40,11 +54,11 @@ public class PuzzlingPatternSetFactoryTest {
 
 	}
 
+	/**
+	 * 
+	 */
 	@Test
-	public void testVMVAndVEMEV() {
-
-		PuzzlingFlapPatternSetFactory setFactory = new PuzzlingFlapPatternSetFactory(
-				ruleFactory.createAlwaysAcceptable(), ruleFactory.createNoPruning());
+	public final void testVMVAndVEMEV() {
 
 		List<AngleUnitFlapPattern> patterns =
 				setFactory.createPatterns(DIVISION_SIZE, createVMVAndVEMEV());
