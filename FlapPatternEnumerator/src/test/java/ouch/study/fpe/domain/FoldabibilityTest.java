@@ -16,7 +16,7 @@ public class FoldabibilityTest {
 				LineType.VALLEY, LineType.MOUNTAIN, LineType.EMPTY, LineType.MOUNTAIN,
 				LineType.VALLEY, LineType.MOUNTAIN, LineType.EMPTY, LineType.MOUNTAIN });
 
-		assertTrue(pattern.isFoldable());
+		assertTrue(pattern.isProbablyFoldable());
 
 	}
 }

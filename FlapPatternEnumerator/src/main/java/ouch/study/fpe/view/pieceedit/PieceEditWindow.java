@@ -1,4 +1,4 @@
-package ouch.study.fpe.view.pieceinput;
+package ouch.study.fpe.view.pieceedit;
 
 import java.awt.Container;
 
@@ -7,7 +7,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.SpringLayout;
 
-import ouch.study.fpe.view.PaintScreen;
+import ouch.study.fpe.view.part.PaintScreen;
 
 public class PieceEditWindow extends JFrame {
 

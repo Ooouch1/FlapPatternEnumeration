@@ -1,6 +1,5 @@
 package ouch.study.fpe.view.main;
 
-import java.awt.Component;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,15 +13,17 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+
 import ouch.study.fpe.controller.EnumerationRunner;
 import ouch.study.fpe.controller.EnumerationRunnerFactory;
 import ouch.study.fpe.controller.FlapPatternsSettable;
 import ouch.study.fpe.domain.AngleUnitFlapPattern;
 import ouch.study.fpe.domain.LineType;
-import ouch.study.fpe.view.ChangeScreenPageOnMouseClicked;
-import ouch.study.fpe.view.PaintScreen;
-import ouch.study.fpe.view.pieceinput.PieceEditWindowManager;
-import ouch.study.fpe.view.pieceinput.PieceLineFactory;
+import ouch.study.fpe.view.part.ChangeScreenPageOnMouseClicked;
+import ouch.study.fpe.view.part.PaintScreen;
+import ouch.study.fpe.view.pieceedit.PieceLineFactory;
 
 /**
  * generates only one window per this instance.
@@ -30,6 +31,7 @@ import ouch.study.fpe.view.pieceinput.PieceLineFactory;
  * @author Koji
  * 
  */
+@Configurable
 public class MainWindowManager implements FlapPatternsSettable {
 
 	// ===============================================================================
@@ -54,6 +56,9 @@ public class MainWindowManager implements FlapPatternsSettable {
 	// ----------------------------------------------------------------
 	// Controller factories
 	private final EnumerationRunnerFactory runnerFactory = new EnumerationRunnerFactory();
+
+	@Autowired
+	private ParentFinder parentFinder;
 
 	/**
 	 * builds elements' actions.
@@ -112,18 +117,6 @@ public class MainWindowManager implements FlapPatternsSettable {
 		button.addActionListener(new OnClickOpenPieceEditButton());
 	}
 
-	private Container findParentWindow(final Component c) {
-		Container parent = c.getParent();
-
-		for (int i = 0; i < 10; i++) {
-			if (parent instanceof MainWindow) {
-				parent = parent.getParent();
-			}
-		}
-
-		return parent;
-	}
-
 	// ==========================================================================
 	// Event Listeners
 	// ==========================================================================
@@ -132,10 +125,13 @@ public class MainWindowManager implements FlapPatternsSettable {
 	 * Open piece edit window.
 	 */
 	private class OnClickOpenPieceEditButton implements ActionListener {
+		@Autowired
+		PieceEditWindowFactory windowFactory;
+
 		@Override
 		public void actionPerformed(final ActionEvent e) {
-			PieceEditWindowManager manager = new PieceEditWindowManager(MainWindowManager.this, divisionText);
-			manager.getView().setVisible(true);
+			JFrame editWindow = windowFactory.createWindow(MainWindowManager.this, divisionText);
+			editWindow.setVisible(true);
 
 		}
 	}
@@ -157,8 +153,7 @@ public class MainWindowManager implements FlapPatternsSettable {
 
 		@Override
 		public void actionPerformed(final ActionEvent e) {
-
-			Container parent = findParentWindow(button);
+			Container parent = parentFinder.find(MainWindow.class, button);
 			// BruteForceEnumerationRunner runner = new
 			// BruteForceEnumerationRunner(divisionText, paintScreen);
 

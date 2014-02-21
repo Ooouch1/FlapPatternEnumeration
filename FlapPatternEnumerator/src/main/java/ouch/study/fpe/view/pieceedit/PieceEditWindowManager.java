@@ -1,4 +1,4 @@
-package ouch.study.fpe.view.pieceinput;
+package ouch.study.fpe.view.pieceedit;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,8 +13,8 @@ import javax.swing.JFrame;
 import ouch.study.fpe.controller.FlapPatternsSettable;
 import ouch.study.fpe.controller.IntegerGettable;
 import ouch.study.fpe.domain.AngleUnitFlapPattern;
-import ouch.study.fpe.view.ChangeScreenPageOnMouseClicked;
-import ouch.study.fpe.view.PaintScreen;
+import ouch.study.fpe.view.part.ChangeScreenPageOnMouseClicked;
+import ouch.study.fpe.view.part.PaintScreen;
 
 public class PieceEditWindowManager {
 	private PieceEditWindow window;

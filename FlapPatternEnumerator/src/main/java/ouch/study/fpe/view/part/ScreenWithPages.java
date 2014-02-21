@@ -1,4 +1,4 @@
-package ouch.study.fpe.view;
+package ouch.study.fpe.view.part;
 
 public interface ScreenWithPages {
 

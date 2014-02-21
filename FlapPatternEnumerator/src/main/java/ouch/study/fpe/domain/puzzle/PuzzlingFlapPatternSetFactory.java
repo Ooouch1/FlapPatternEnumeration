@@ -77,6 +77,8 @@ public class PuzzlingFlapPatternSetFactory {
 			candidates = pieceMap.get(LineType.VALLEY);
 		}
 
+		LOGGER.info(pieces.size() + "pieces: " + pieceMap);
+
 		AngleUnitFlapPattern seed = new AngleUnitFlapPattern(divisionSize);
 		createPatternsImpl(seed, 0, candidates);
 
@@ -86,9 +88,14 @@ public class PuzzlingFlapPatternSetFactory {
 	private void createPatternsImpl(final AngleUnitFlapPattern seed, final int indexToAdd,
 			final Collection<Piece> pieces) {
 
-		if (indexToAdd == tailIndex && acceptablePatternCondition.holds(seed)) {
-			trace("accepted");
-			patterns.add(seed.cloneInstance());
+		trace(seed);
+
+		if (indexToAdd == tailIndex) {
+			if (acceptablePatternCondition.holds(seed)) {
+				trace("accepted");
+				patterns.add(seed.cloneInstance());
+			}
+			return;
 		}
 
 		if (indexToAdd > tailIndex) {
@@ -108,6 +115,9 @@ public class PuzzlingFlapPatternSetFactory {
 		}
 
 		for (Piece piece : pieces) {
+
+			trace(piece);
+
 			if (!isAppendable(seed, indexToAdd, piece)) {
 				continue;
 			}

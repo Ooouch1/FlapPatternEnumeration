@@ -14,7 +14,7 @@ import javax.swing.border.BevelBorder;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import ouch.study.fpe.view.PaintScreen;
+import ouch.study.fpe.view.part.PaintScreen;
 
 public class MainWindow extends JFrame {
 	/** Logger. */

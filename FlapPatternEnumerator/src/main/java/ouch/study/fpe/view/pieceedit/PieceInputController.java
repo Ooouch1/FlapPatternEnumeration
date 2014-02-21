@@ -1,4 +1,4 @@
-package ouch.study.fpe.view.pieceinput;
+package ouch.study.fpe.view.pieceedit;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -13,8 +13,8 @@ import org.apache.log4j.Logger;
 
 import ouch.study.fpe.domain.AngleUnitFlapPattern;
 import ouch.study.fpe.domain.LineType;
-import ouch.study.fpe.view.PaintScreen;
-import ouch.study.fpe.view.PaintScreenGridManager;
+import ouch.study.fpe.view.part.PaintScreen;
+import ouch.study.fpe.view.part.PaintScreenGridManager;
 
 public class PieceInputController {
 

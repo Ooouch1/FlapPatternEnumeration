@@ -1,4 +1,4 @@
-package ouch.study.fpe.view.pieceinput;
+package ouch.study.fpe.view.pieceedit;
 
 import java.awt.geom.Rectangle2D;
 

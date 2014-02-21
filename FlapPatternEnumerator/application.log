@@ -1,0 +1,4 @@
+INFO AWT-EventQueue-0 ouch.study.fpe.domain.bf.BruteForceFlapPatternEnumerator - #uniques of mountain only: 1546
+INFO AWT-EventQueue-0 ouch.study.fpe.domain.bf.BruteForceFlapPatternEnumerator - add valleys for each
+INFO AWT-EventQueue-0 ouch.study.fpe.domain.bf.BruteForceFlapPatternEnumerator - # unique patterns: 68218
+INFO AWT-EventQueue-0 ouch.study.fpe.domain.bf.BruteForceFlapPatternEnumerator - #call of reursion: 1088295

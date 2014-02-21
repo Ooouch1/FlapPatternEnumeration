@@ -1,16 +1,27 @@
 package ouch.study.fpe;
 
-import javax.swing.JFrame;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
 
-import ouch.study.fpe.view.main.MainWindowManager;
-
+@ComponentScan(
+		basePackages = {
+				"ouch.study.fpe"
+		})
+@EnableAutoConfiguration
+@EnableSpringConfigured
 public class FlapPatternEnumerationMain {
 
 	public static void main(final String[] args) {
+		SpringApplication app = new SpringApplication(
+				FlapPatternEnumerationMain.class);
 
-		MainWindowManager factory = new MainWindowManager();
-		JFrame window = factory.getView();
+		app.setShowBanner(false);
+		// app.setLogStartupInfo(false);
 
-		window.setVisible(true);
+		app.setHeadless(false);
+		app.run(args);
+
 	}
 }

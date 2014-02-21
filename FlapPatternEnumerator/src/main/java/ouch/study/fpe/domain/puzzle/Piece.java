@@ -26,6 +26,6 @@ class Piece {
 
 	@Override
 	public String toString() {
-		return lines.toString();
+		return "Piece: " + lines.toString();
 	}
 }

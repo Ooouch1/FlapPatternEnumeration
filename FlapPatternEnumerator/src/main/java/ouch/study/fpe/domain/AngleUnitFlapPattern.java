@@ -54,7 +54,7 @@ public class AngleUnitFlapPattern implements Cloneable, Comparable<AngleUnitFlap
 	 * 
 	 * @return true if this pattern is foldable.
 	 */
-	public boolean isFoldable() {
+	public boolean isProbablyFoldable() {
 
 		return holdsMaekawaTheorem() && holdsKawasakiTheorem();
 	}
@@ -267,6 +267,17 @@ public class AngleUnitFlapPattern implements Cloneable, Comparable<AngleUnitFlap
 		}
 
 		return count;
+	}
+
+	public LineType getMajor() {
+		int mountainCount = countLines(LineType.MOUNTAIN);
+		int valleyCount = countLines(LineType.VALLEY);
+
+		if (mountainCount > valleyCount) {
+			return LineType.MOUNTAIN;
+		}
+
+		return LineType.VALLEY;
 	}
 
 	/**

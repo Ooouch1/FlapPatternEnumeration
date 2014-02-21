@@ -1,4 +1,4 @@
-package ouch.study.fpe.view;
+package ouch.study.fpe.view.part;
 
 import java.awt.Color;
 import java.awt.Graphics2D;

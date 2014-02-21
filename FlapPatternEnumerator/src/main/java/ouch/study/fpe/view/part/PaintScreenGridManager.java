@@ -1,4 +1,4 @@
-package ouch.study.fpe.view;
+package ouch.study.fpe.view.part;
 
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;

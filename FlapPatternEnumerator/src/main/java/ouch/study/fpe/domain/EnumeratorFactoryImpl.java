@@ -3,7 +3,7 @@ package ouch.study.fpe.domain;
 import ouch.study.fpe.domain.bf.BruteForceFlapPatternEnumerator;
 import ouch.study.fpe.domain.puzzle.PuzzlingFlapPatternEnumerator;
 
-public class EnumeratorFatory {
+public class EnumeratorFactoryImpl {
 	/**
 	 * 
 	 * @return an enumerator which generates patterns by adding single line one

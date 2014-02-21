@@ -127,7 +127,7 @@ public class FlapPatternTestUsing90Degrees {
 	private void assertIsFoldable(final AngleUnitFlapPattern pattern) {
 		assertTrue(pattern.holdsMaekawaTheorem());
 		assertTrue(pattern.holdsKawasakiTheorem());
-		assertTrue(pattern.isFoldable());
+		assertTrue(pattern.isProbablyFoldable());
 
 	}
 
