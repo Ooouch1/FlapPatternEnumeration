@@ -73,8 +73,8 @@ public class FlapPatternTestUsing90Degrees {
 		assertEquals(
 				0,
 				factory.createPattern(
-						new LineType[] { LineType.MOUNTAIN, LineType.EMPTY,
-								LineType.VALLEY, LineType.EMPTY }).findFirstLineIndex());
+						LineType.MOUNTAIN, LineType.EMPTY,
+						LineType.VALLEY, LineType.EMPTY).findFirstLineIndex());
 
 		// ...
 		// .oM
@@ -82,8 +82,8 @@ public class FlapPatternTestUsing90Degrees {
 		assertEquals(
 				1,
 				factory.createPattern(
-						new LineType[] { LineType.EMPTY, LineType.MOUNTAIN,
-								LineType.VALLEY, LineType.EMPTY }).findFirstLineIndex());
+						LineType.EMPTY, LineType.MOUNTAIN,
+						LineType.VALLEY, LineType.EMPTY).findFirstLineIndex());
 	}
 
 	@Test
@@ -92,7 +92,7 @@ public class FlapPatternTestUsing90Degrees {
 		// .o.
 		// .V.
 		assertFalse(factory.createPattern(
-				new LineType[] { LineType.MOUNTAIN, LineType.EMPTY, LineType.VALLEY, LineType.EMPTY })
+				LineType.MOUNTAIN, LineType.EMPTY, LineType.VALLEY, LineType.EMPTY)
 				.holdsMaekawaTheorem());
 
 	}
@@ -103,7 +103,7 @@ public class FlapPatternTestUsing90Degrees {
 		// .oM
 		// .V.
 		assertFalse(factory.createPattern(
-				new LineType[] { LineType.MOUNTAIN, LineType.EMPTY, LineType.VALLEY, LineType.EMPTY })
+				LineType.MOUNTAIN, LineType.EMPTY, LineType.VALLEY, LineType.EMPTY)
 				.holdsMaekawaTheorem());
 
 	}
@@ -113,14 +113,14 @@ public class FlapPatternTestUsing90Degrees {
 		// .M.
 		// .o.
 		// .M.
-		assertIsFoldable(factory.createPattern(new LineType[] { LineType.MOUNTAIN,
-				LineType.EMPTY, LineType.MOUNTAIN, LineType.EMPTY }));
+		assertIsFoldable(factory.createPattern(
+				LineType.MOUNTAIN, LineType.EMPTY, LineType.MOUNTAIN, LineType.EMPTY));
 
 		// .M.
 		// VoM
 		// .M.
-		assertIsFoldable(factory.createPattern(new LineType[] { LineType.MOUNTAIN,
-				LineType.MOUNTAIN, LineType.MOUNTAIN, LineType.VALLEY }));
+		assertIsFoldable(factory.createPattern(
+				LineType.MOUNTAIN, LineType.MOUNTAIN, LineType.MOUNTAIN, LineType.VALLEY));
 
 	}
 

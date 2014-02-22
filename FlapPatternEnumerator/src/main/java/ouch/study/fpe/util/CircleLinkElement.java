@@ -76,16 +76,8 @@ public class CircleLinkElement<Value> {
 		return prev;
 	}
 
-	public void setPrevious(final CircleLinkElement<Value> previous) {
-		this.prev = previous;
-	}
-
 	public CircleLinkElement<Value> getNext() {
 		return next;
-	}
-
-	public void setNext(final CircleLinkElement<Value> next) {
-		this.next = next;
 	}
 
 }

@@ -32,9 +32,6 @@ public class EnumerationRunnerFactoryTest {
 		MockitoAnnotations.initMocks(this);
 
 		factory = new EnumerationRunnerFactory();
-
-		mockDivisionSize = mock(IntegerGettable.class);
-		mockPatternDestination = mock(FlapPatternsSettable.class);
 	}
 
 	@Test

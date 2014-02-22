@@ -26,8 +26,8 @@ public class PatternHashElementTest {
 	 * .oM
 	 * .V.
 	 */
-	private final AngleUnitFlapPattern pattern = factory.createPattern(new LineType[] { LineType.EMPTY,
-			LineType.MOUNTAIN, LineType.VALLEY, LineType.EMPTY });
+	private final AngleUnitFlapPattern pattern = factory.createPattern(LineType.EMPTY,
+			LineType.MOUNTAIN, LineType.VALLEY, LineType.EMPTY);
 	/**
 	 * key = 00 01 10 00
 	 */

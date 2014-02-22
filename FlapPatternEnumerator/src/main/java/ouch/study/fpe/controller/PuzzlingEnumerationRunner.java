@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 import ouch.study.fpe.domain.AngleUnitFlapPattern;
 import ouch.study.fpe.domain.EnumeratorFactory;
-import ouch.study.fpe.domain.FlapPatternEnumerator;
 import ouch.study.fpe.domain.LineType;
+import ouch.study.fpe.domain.rule.FlapPatternEnumerator;
 
 @Configurable
 public class PuzzlingEnumerationRunner implements EnumerationRunner {

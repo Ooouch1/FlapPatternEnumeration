@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 
 import oripa.util.collection.Rule;
 import ouch.study.fpe.domain.AngleUnitFlapPattern;
@@ -21,6 +23,7 @@ import ouch.study.fpe.domain.rule.AlwaysTrue;
  * @author Koji
  * 
  */
+@Configurable
 public class BruteForcePatternSetFactory {
 	/** Logger. */
 	private static final Logger LOGGER = LogManager
@@ -38,6 +41,9 @@ public class BruteForcePatternSetFactory {
 
 	private int recursionCount = 0;
 
+	@Autowired
+	private RuleFactory factory;
+
 	/**
 	 * 
 	 * 
@@ -50,7 +56,6 @@ public class BruteForcePatternSetFactory {
 		this.tailIndex = tailIndex;
 
 		if (enableFoldabilityTest) {
-			RuleFactory factory = new RuleFactory();
 			acceptablePatternCondition = factory.createFoldabilityRule();
 		}
 	}

@@ -4,8 +4,8 @@ import java.util.Collection;
 import java.util.List;
 
 import ouch.study.fpe.domain.AngleUnitFlapPattern;
-import ouch.study.fpe.domain.FlapPatternEnumerator;
 import ouch.study.fpe.domain.LineType;
+import ouch.study.fpe.domain.rule.FlapPatternEnumerator;
 
 public class EnumerationRunnerTemplate implements
 		EnumerationRunner {

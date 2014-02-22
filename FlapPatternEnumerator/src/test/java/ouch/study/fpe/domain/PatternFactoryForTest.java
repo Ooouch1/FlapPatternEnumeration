@@ -10,16 +10,16 @@ public class PatternFactoryForTest {
 	 * @param divisionSize
 	 *            division size
 	 * 
-	 * @param lineArray
+	 * @param lines
 	 *            line types
 	 * @return Pattern object
 	 */
-	public AngleUnitFlapPattern createPattern(Integer divisionSize, LineType[] lineArray) {
-		if (lineArray.length != divisionSize) {
+	public AngleUnitFlapPattern createPattern(final Integer divisionSize, final LineType... lines) {
+		if (lines.length != divisionSize) {
 			throw new RuntimeException();
 		}
 
-		return new AngleUnitFlapPattern(divisionSize, Arrays.asList(lineArray));
+		return new AngleUnitFlapPattern(divisionSize, Arrays.asList(lines));
 
 	}
 
@@ -27,14 +27,14 @@ public class PatternFactoryForTest {
 	 * division size is set to given array's length.
 	 * 
 	 * 
-	 * @param lineArray
+	 * @param lines
 	 *            line types
 	 * @return Pattern object
 	 */
-	public AngleUnitFlapPattern createPattern(LineType[] lineArray) {
-		int divisionSize = lineArray.length;
+	public AngleUnitFlapPattern createPattern(final LineType... lines) {
+		int divisionSize = lines.length;
 
-		return new AngleUnitFlapPattern(divisionSize, Arrays.asList(lineArray));
+		return new AngleUnitFlapPattern(divisionSize, Arrays.asList(lines));
 
 	}
 

@@ -7,10 +7,18 @@ import java.util.Collection;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.SpringApplicationContextLoader;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import ouch.study.fpe.domain.AngleUnitFlapPattern;
-import ouch.study.fpe.domain.bf.BruteForceFlapPatternEnumerator;
+import ouch.study.fpe.test.TesterConfig;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(
+		classes = TesterConfig.class,
+		loader = SpringApplicationContextLoader.class)
 public class BruteForceEnumeratorTest {
 	/** Logger. */
 	private static final Logger LOGGER = LogManager

@@ -6,12 +6,14 @@ import java.util.List;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 
 import oripa.util.collection.Rule;
 import ouch.study.fpe.domain.AngleUnitFlapPattern;
-import ouch.study.fpe.domain.FlapPatternEnumerator;
 import ouch.study.fpe.domain.LineType;
 import ouch.study.fpe.domain.RuleFactory;
+import ouch.study.fpe.domain.rule.FlapPatternEnumerator;
 
 /**
  * Enumerator.
@@ -21,11 +23,13 @@ import ouch.study.fpe.domain.RuleFactory;
  * @author Koji
  * 
  */
+@Configurable
 public class BruteForceFlapPatternEnumerator implements FlapPatternEnumerator {
 	/** Logger. */
 	private static final Logger LOGGER = LogManager.getLogger(BruteForceFlapPatternEnumerator.class);
 
-	private final static RuleFactory ruleFactory = new RuleFactory();
+	@Autowired
+	private RuleFactory ruleFactory;
 
 	int recursionCount = 0;
 

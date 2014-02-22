@@ -10,15 +10,26 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.SpringApplicationContextLoader;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import ouch.study.fpe.domain.AngleUnitFlapPattern;
 import ouch.study.fpe.domain.LineType;
 import ouch.study.fpe.domain.PatternFactoryForTest;
 import ouch.study.fpe.domain.RuleFactory;
+import ouch.study.fpe.domain.rule.RuleFactoryImpl;
+import ouch.study.fpe.test.TesterConfig;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(
+		classes = TesterConfig.class,
+		loader = SpringApplicationContextLoader.class)
 public class PuzzlingPatternSetFactoryTest {
 	private PatternFactoryForTest patternFactory = new PatternFactoryForTest();
-	private RuleFactory ruleFactory = new RuleFactory();
+
+	private RuleFactory ruleFactory = new RuleFactoryImpl();
 	private static final int DIVISION_SIZE = 8;
 
 	/** Logger. */

@@ -5,8 +5,12 @@ import ouch.study.fpe.domain.AngleUnitFlapPattern;
 
 public class OrigamiFoldability extends AbstractRule<AngleUnitFlapPattern> {
 	@Override
-	public boolean holds(AngleUnitFlapPattern pattern) {
-		// TODO 自動生成されたメソッド・スタブ
-		return pattern.isProbablyFoldable();
+	public boolean holds(final AngleUnitFlapPattern pattern) {
+		if (!pattern.isProbablyFoldable()) {
+			return false;
+		}
+
+		LayerCollisionChecker checker = new LayerCollisionChecker();
+		return checker.patternCanBeFlatten(pattern);
 	}
 }

@@ -1,35 +1,20 @@
 package ouch.study.fpe.domain;
 
 import oripa.util.collection.Rule;
-import ouch.study.fpe.domain.rule.AcceptableByLineCount;
-import ouch.study.fpe.domain.rule.AlwaysTrue;
 import ouch.study.fpe.domain.rule.ConjunctionRule;
-import ouch.study.fpe.domain.rule.DuplicatedPatternHash;
-import ouch.study.fpe.domain.rule.OrigamiFoldability;
 
-public class RuleFactory {
+public interface RuleFactory {
 
-	public ConjunctionRule<AngleUnitFlapPattern> createFoldablilityRuleAsConjunctionable() {
-		return new ConjunctionRule<>(new OrigamiFoldability());
-	}
+	public abstract ConjunctionRule<AngleUnitFlapPattern> createFoldablilityRuleAsConjunctionable();
 
-	public Rule<AngleUnitFlapPattern> createFoldabilityRule() {
-		return new OrigamiFoldability();
-	}
+	public abstract Rule<AngleUnitFlapPattern> createFoldabilityRule();
 
-	public Rule<AngleUnitFlapPattern> createDuplicationDetector(final int headIndex) {
-		return new DuplicatedPatternHash(headIndex);
-	}
+	public abstract Rule<AngleUnitFlapPattern> createDuplicationDetector(int headIndex);
 
-	public Rule<AngleUnitFlapPattern> createNoPruning() {
-		return new AlwaysTrue().asDenied();
-	}
+	public abstract Rule<AngleUnitFlapPattern> createNoPruning();
 
-	public Rule<AngleUnitFlapPattern> createAcceptableByLineCount(final int expectedCount) {
-		return new AcceptableByLineCount(expectedCount);
-	}
+	public abstract Rule<AngleUnitFlapPattern> createAcceptableByLineCount(int expectedCount);
 
-	public Rule<AngleUnitFlapPattern> createAlwaysAcceptable() {
-		return new AlwaysTrue();
-	}
+	public abstract Rule<AngleUnitFlapPattern> createAlwaysAcceptable();
+
 }
