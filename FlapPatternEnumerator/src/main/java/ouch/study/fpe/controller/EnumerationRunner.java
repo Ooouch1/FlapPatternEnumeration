@@ -13,7 +13,7 @@ public interface EnumerationRunner extends Command<Collection<AngleUnitFlapPatte
 	 * Enumerates all foldable patterns by adding lines one by one.
 	 * 
 	 * @param elements
-	 *            meaningless.
+	 *            depends on implementation of the algorithm.
 	 */
 	@Override
 	public abstract Collection<AngleUnitFlapPattern> run(Collection<List<LineType>> elements);
