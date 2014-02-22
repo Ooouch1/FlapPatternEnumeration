@@ -59,6 +59,8 @@ public class MainWindowManager implements FlapPatternsSettable {
 
 	@Autowired
 	private ParentFinder parentFinder;
+	@Autowired
+	private PieceEditWindowFactory windowFactory;
 
 	/**
 	 * builds elements' actions.
@@ -125,8 +127,6 @@ public class MainWindowManager implements FlapPatternsSettable {
 	 * Open piece edit window.
 	 */
 	private class OnClickOpenPieceEditButton implements ActionListener {
-		@Autowired
-		PieceEditWindowFactory windowFactory;
 
 		@Override
 		public void actionPerformed(final ActionEvent e) {
