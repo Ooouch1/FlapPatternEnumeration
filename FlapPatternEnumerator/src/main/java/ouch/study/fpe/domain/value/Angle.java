@@ -1,4 +1,4 @@
-package ouch.study.fpe.domain;
+package ouch.study.fpe.domain.value;
 
 public interface Angle {
 

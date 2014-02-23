@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import ouch.study.fpe.domain.value.LineType;
+
 public class FlapPatternTestUsing90Degrees {
 
 	private static final Integer DIVISION_SIZE = 4;

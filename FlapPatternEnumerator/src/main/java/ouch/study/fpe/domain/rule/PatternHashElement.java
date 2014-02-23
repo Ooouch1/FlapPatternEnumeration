@@ -3,7 +3,7 @@ package ouch.study.fpe.domain.rule;
 import java.util.HashMap;
 
 import ouch.study.fpe.domain.AngleUnitFlapPattern;
-import ouch.study.fpe.domain.LineType;
+import ouch.study.fpe.domain.value.LineType;
 
 /**
  * this object has a unique key among all flap patterns and its unified pattern.

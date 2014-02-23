@@ -1,4 +1,4 @@
-package ouch.study.fpe.domain.rule;
+package ouch.study.fpe.domain.rule.lib;
 
 import java.util.List;
 

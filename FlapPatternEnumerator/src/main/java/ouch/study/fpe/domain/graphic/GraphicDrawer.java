@@ -4,7 +4,7 @@ import java.awt.Graphics2D;
 import java.util.List;
 
 import ouch.study.fpe.domain.AngleUnitFlapPattern;
-import ouch.study.fpe.domain.LineType;
+import ouch.study.fpe.domain.value.LineType;
 
 public class GraphicDrawer {
 

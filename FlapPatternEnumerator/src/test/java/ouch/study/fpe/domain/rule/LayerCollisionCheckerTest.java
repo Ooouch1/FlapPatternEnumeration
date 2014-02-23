@@ -7,14 +7,15 @@ import org.apache.log4j.Logger;
 import org.junit.Test;
 
 import ouch.study.fpe.domain.AngleUnitFlapPattern;
-import ouch.study.fpe.domain.LineType;
 import ouch.study.fpe.domain.PatternFactoryForTest;
-import ouch.study.fpe.domain.rule.LayerCollisionChecker;
+import ouch.study.fpe.domain.rule.lib.LayerFlattenability;
+import ouch.study.fpe.domain.value.LineType;
 
 public class LayerCollisionCheckerTest {
 	PatternFactoryForTest factory = new PatternFactoryForTest();
 
-	LayerCollisionChecker checker = new LayerCollisionChecker();
+	LayerFlattenability checker = new LayerFlattenability();
+	FlapPatternConverter converter = new FlapPatternConverterImpl();
 
 	/** Logger. */
 	private static final Logger LOGGER = LogManager.getLogger(LayerCollisionCheckerTest.class);
@@ -28,7 +29,7 @@ public class LayerCollisionCheckerTest {
 				LineType.MOUNTAIN, LineType.MOUNTAIN, LineType.MOUNTAIN, LineType.MOUNTAIN, LineType.MOUNTAIN,
 				LineType.VALLEY, LineType.VALLEY, LineType.VALLEY);
 
-		assertTrue(checker.patternCanBeFlatten(pattern));
+		assertTrue(checker.holds(converter.toLineGapCircle(pattern)));
 	}
 
 	@Test
@@ -44,7 +45,7 @@ public class LayerCollisionCheckerTest {
 				LineType.MOUNTAIN
 				);
 
-		assertFalse(checker.patternCanBeFlatten(pattern));
+		assertFalse(checker.holds(converter.toLineGapCircle(pattern)));
 
 	}
 }

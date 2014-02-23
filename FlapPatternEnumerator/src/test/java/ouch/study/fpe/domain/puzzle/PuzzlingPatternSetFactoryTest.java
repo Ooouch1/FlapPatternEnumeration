@@ -16,10 +16,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import ouch.study.fpe.domain.AngleUnitFlapPattern;
-import ouch.study.fpe.domain.LineType;
 import ouch.study.fpe.domain.PatternFactoryForTest;
 import ouch.study.fpe.domain.RuleFactory;
 import ouch.study.fpe.domain.rule.RuleFactoryImpl;
+import ouch.study.fpe.domain.value.LineType;
 import ouch.study.fpe.test.TesterConfig;
 
 @RunWith(SpringJUnit4ClassRunner.class)

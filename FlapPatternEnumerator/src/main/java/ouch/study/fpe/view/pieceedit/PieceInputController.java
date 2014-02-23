@@ -12,7 +12,7 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import ouch.study.fpe.domain.AngleUnitFlapPattern;
-import ouch.study.fpe.domain.LineType;
+import ouch.study.fpe.domain.value.LineType;
 import ouch.study.fpe.view.part.PaintScreen;
 import ouch.study.fpe.view.part.PaintScreenGridManager;
 

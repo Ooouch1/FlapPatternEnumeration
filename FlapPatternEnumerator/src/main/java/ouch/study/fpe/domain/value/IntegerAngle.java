@@ -1,6 +1,6 @@
-package ouch.study.fpe.domain.rule;
+package ouch.study.fpe.domain.value;
 
-import ouch.study.fpe.domain.Angle;
+
 
 public class IntegerAngle implements Angle {
 

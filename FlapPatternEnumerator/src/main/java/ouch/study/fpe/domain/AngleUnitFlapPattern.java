@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import ouch.study.fpe.domain.value.LineType;
+
 /**
  * This object describes a flap which is composed with 360/k degrees angles.
  * 

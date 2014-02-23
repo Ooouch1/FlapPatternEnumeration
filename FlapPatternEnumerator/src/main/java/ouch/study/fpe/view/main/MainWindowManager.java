@@ -20,7 +20,7 @@ import ouch.study.fpe.controller.EnumerationRunner;
 import ouch.study.fpe.controller.EnumerationRunnerFactory;
 import ouch.study.fpe.controller.FlapPatternsSettable;
 import ouch.study.fpe.domain.AngleUnitFlapPattern;
-import ouch.study.fpe.domain.LineType;
+import ouch.study.fpe.domain.value.LineType;
 import ouch.study.fpe.view.part.ChangeScreenPageOnMouseClicked;
 import ouch.study.fpe.view.part.PaintScreen;
 import ouch.study.fpe.view.pieceedit.PieceLineFactory;

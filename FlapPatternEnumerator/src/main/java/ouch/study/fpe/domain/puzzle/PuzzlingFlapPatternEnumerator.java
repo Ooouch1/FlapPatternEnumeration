@@ -8,9 +8,9 @@ import org.springframework.beans.factory.annotation.Configurable;
 
 import oripa.util.collection.Rule;
 import ouch.study.fpe.domain.AngleUnitFlapPattern;
-import ouch.study.fpe.domain.LineType;
+import ouch.study.fpe.domain.FlapPatternEnumerator;
 import ouch.study.fpe.domain.RuleFactory;
-import ouch.study.fpe.domain.rule.FlapPatternEnumerator;
+import ouch.study.fpe.domain.value.LineType;
 
 @Configurable
 public class PuzzlingFlapPatternEnumerator implements FlapPatternEnumerator {

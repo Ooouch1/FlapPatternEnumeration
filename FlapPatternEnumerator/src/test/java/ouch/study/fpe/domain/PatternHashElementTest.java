@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import org.junit.Test;
 
 import ouch.study.fpe.domain.rule.PatternHashElement;
+import ouch.study.fpe.domain.value.LineType;
 
 /**
  * tests that hash element generates its key in intended form.

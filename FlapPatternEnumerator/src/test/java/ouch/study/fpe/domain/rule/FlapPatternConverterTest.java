@@ -5,18 +5,18 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import ouch.study.fpe.domain.AngleUnitFlapPattern;
-import ouch.study.fpe.domain.LineType;
 import ouch.study.fpe.domain.PatternFactoryForTest;
-import ouch.study.fpe.domain.rule.FlapPatternConverter;
-import ouch.study.fpe.domain.rule.IntegerAngle;
-import ouch.study.fpe.domain.rule.LineGap;
-import ouch.study.fpe.domain.rule.LineGapCircle;
+import ouch.study.fpe.domain.rule.FlapPatternConverterImpl;
+import ouch.study.fpe.domain.rule.lib.LineGap;
+import ouch.study.fpe.domain.rule.lib.LineGapCircle;
+import ouch.study.fpe.domain.value.IntegerAngle;
+import ouch.study.fpe.domain.value.LineType;
 import ouch.study.fpe.util.CircleLinkPointer;
 
 public class FlapPatternConverterTest {
 	PatternFactoryForTest factory = new PatternFactoryForTest();
 
-	FlapPatternConverter converter = new FlapPatternConverter();
+	FlapPatternConverter converter = new FlapPatternConverterImpl();
 
 	@Test
 	public void test() {

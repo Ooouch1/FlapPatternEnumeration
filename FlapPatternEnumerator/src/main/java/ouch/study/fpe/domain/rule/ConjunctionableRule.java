@@ -6,21 +6,21 @@ import java.util.LinkedList;
 import oripa.util.collection.AbstractRule;
 import oripa.util.collection.Rule;
 
-public class ConjunctionRule<Variable> extends AbstractRule<Variable> {
+public class ConjunctionableRule<Variable> extends AbstractRule<Variable> {
 
 	private final Collection<Rule<Variable>> rules = new LinkedList<>();
 
 	/**
 	 * returns always true.
 	 */
-	public ConjunctionRule() {
+	public ConjunctionableRule() {
 	}
 
-	public ConjunctionRule(final Collection<Rule<Variable>> rules) {
+	public ConjunctionableRule(final Collection<Rule<Variable>> rules) {
 		this.rules.addAll(rules);
 	}
 
-	public ConjunctionRule(final Rule<Variable> rule) {
+	public ConjunctionableRule(final Rule<Variable> rule) {
 		this.rules.add(rule);
 	}
 
@@ -30,7 +30,7 @@ public class ConjunctionRule<Variable> extends AbstractRule<Variable> {
 	 * @return
 	 *         this instance after adding r.
 	 */
-	public ConjunctionRule<Variable> addRule(final Rule<Variable> r) {
+	public ConjunctionableRule<Variable> addRule(final Rule<Variable> r) {
 		rules.add(r);
 		return this;
 	}

@@ -6,6 +6,8 @@ import java.util.HashSet;
 
 import org.junit.Test;
 
+import ouch.study.fpe.domain.value.LineType;
+
 public class FlapPatternBasicFunctionalityTest {
 
 	@Test

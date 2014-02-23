@@ -1,6 +1,6 @@
 package ouch.study.fpe.domain.graphic;
 
-import ouch.study.fpe.domain.LineType;
+import ouch.study.fpe.domain.value.LineType;
 
 /**
  * creates objects for drawing.

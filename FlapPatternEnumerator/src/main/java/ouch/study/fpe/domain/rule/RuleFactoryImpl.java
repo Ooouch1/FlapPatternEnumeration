@@ -17,8 +17,8 @@ public class RuleFactoryImpl implements RuleFactory {
 	 * ()
 	 */
 	@Override
-	public ConjunctionRule<AngleUnitFlapPattern> createFoldablilityRuleAsConjunctionable() {
-		return new ConjunctionRule<>(new OrigamiFoldability());
+	public ConjunctionableRule<AngleUnitFlapPattern> createFoldablilityRuleAsConjunctionable() {
+		return new ConjunctionableRule<>(new OrigamiFoldability(new FlapPatternConverterImpl()));
 	}
 
 	/*
@@ -28,7 +28,7 @@ public class RuleFactoryImpl implements RuleFactory {
 	 */
 	@Override
 	public Rule<AngleUnitFlapPattern> createFoldabilityRule() {
-		return new OrigamiFoldability();
+		return new OrigamiFoldability(new FlapPatternConverterImpl());
 	}
 
 	/*

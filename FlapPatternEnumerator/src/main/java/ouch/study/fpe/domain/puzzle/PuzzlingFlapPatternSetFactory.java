@@ -12,8 +12,8 @@ import org.apache.log4j.Logger;
 
 import oripa.util.collection.Rule;
 import ouch.study.fpe.domain.AngleUnitFlapPattern;
-import ouch.study.fpe.domain.LineType;
 import ouch.study.fpe.domain.rule.AlwaysTrue;
+import ouch.study.fpe.domain.value.LineType;
 
 public class PuzzlingFlapPatternSetFactory {
 	/** Logger. */

@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import ouch.study.fpe.domain.AngleUnitFlapPattern;
-import ouch.study.fpe.domain.LineType;
+import ouch.study.fpe.domain.value.LineType;
 
 public class PieceLineFactory {
 

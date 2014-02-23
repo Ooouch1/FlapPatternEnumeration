@@ -9,7 +9,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import ouch.study.fpe.domain.AngleUnitFlapPattern;
-import ouch.study.fpe.domain.LineType;
+import ouch.study.fpe.domain.value.LineType;
 import ouch.study.fpe.test.TesterConfig;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -37,6 +37,7 @@ public class BruteForcePatternSetFactoryTestUsing90Degrees {
 
 		assertEquals(4, factory.advance(seed, 0, LineType.MOUNTAIN).size());
 
+		// pick up each node on the search
 		assertEquals(
 				4 + 3,
 				factory.createPatternsByAddingLineRecursively(seed,

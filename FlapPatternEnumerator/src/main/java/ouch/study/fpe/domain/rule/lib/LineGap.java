@@ -1,9 +1,15 @@
-package ouch.study.fpe.domain.rule;
+package ouch.study.fpe.domain.rule.lib;
 
-import ouch.study.fpe.domain.Angle;
-import ouch.study.fpe.domain.LineType;
+import ouch.study.fpe.domain.value.Angle;
+import ouch.study.fpe.domain.value.LineType;
 
-class LineGap {
+/**
+ * Holds a radial line and the angle between that line and the next line.
+ * 
+ * @author Koji
+ * 
+ */
+public class LineGap {
 	private final LineType line;
 	private Angle angleToNext;
 
@@ -14,10 +20,6 @@ class LineGap {
 
 	public Angle getAngleToNextLine() {
 		return angleToNext;
-	}
-
-	public void setAngleToNextLine(final Angle a) {
-		angleToNext = a;
 	}
 
 	public LineType getLine() {

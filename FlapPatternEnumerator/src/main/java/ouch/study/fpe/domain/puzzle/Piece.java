@@ -3,7 +3,7 @@ package ouch.study.fpe.domain.puzzle;
 import java.util.ArrayList;
 import java.util.List;
 
-import ouch.study.fpe.domain.LineType;
+import ouch.study.fpe.domain.value.LineType;
 
 class Piece {
 	private List<LineType> lines;

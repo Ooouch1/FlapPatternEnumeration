@@ -1,6 +1,6 @@
-package ouch.study.fpe.domain.rule;
+package ouch.study.fpe.domain.rule.lib;
 
-import ouch.study.fpe.domain.AngleUnitFlapPattern;
+import oripa.util.collection.AbstractRule;
 import ouch.study.fpe.util.CircleLinkPointer;
 import ouch.study.fpe.util.CircleLinkedList;
 
@@ -9,24 +9,14 @@ import ouch.study.fpe.util.CircleLinkedList;
  * @author Koji
  * 
  */
-public class LayerCollisionChecker {
+public class LayerFlattenability extends AbstractRule<LineGapCircle> {
 
-	/**
-	 * 
-	 * @param pattern
-	 *            a pattern which holds Maekawa and Kawasaki theorems.
-	 * @return
-	 *         true if the pattern can be folded flatten.
-	 */
-	public boolean patternCanBeFlatten(final AngleUnitFlapPattern pattern) {
-		FlapPatternConverter converter = new FlapPatternConverter();
-
-		LineGapCircle lineGaps = converter.toLineGapCircle(pattern);
-
-		return foldFlap(lineGaps);
+	@Override
+	public boolean holds(final LineGapCircle oneVertexPattern) {
+		return canBeFlat(oneVertexPattern);
 	}
 
-	boolean foldFlap(final LineGapCircle lineGaps) {
+	private boolean canBeFlat(final LineGapCircle lineGaps) {
 
 		CircleLinkPointer<LineGap> iter = lineGaps.getHeadPointer();
 
@@ -37,13 +27,25 @@ public class LayerCollisionChecker {
 				break;
 			}
 
+			// returned pointer refers the merged gap.
 			iter = mergeAroundByFolding(iter);
+
+			// mark the updated element as the head of circle loop
+			// to recognize when this algorithm should finish.
 			lineGaps.markAsHead(iter);
 		}
 
 		return isFoldedOut(lineGaps);
 	}
 
+	/**
+	 * 
+	 * @param head
+	 *            the head of cirle loop
+	 * @return
+	 *         pointer refering the element to be merged.
+	 *         null if no such element is found.
+	 */
 	private CircleLinkPointer<LineGap> findGapToMerge(final CircleLinkPointer<LineGap> head) {
 		CircleLinkPointer<LineGap> iter = head;
 
@@ -62,6 +64,14 @@ public class LayerCollisionChecker {
 		return null;
 	}
 
+	/**
+	 * tests whether the given pattern is in the acceptable state.
+	 * 
+	 * @param lineGaps
+	 *            pattern
+	 * @return
+	 *         true if the pattern has been flattened.
+	 */
 	private boolean isFoldedOut(final CircleLinkedList<LineGap> lineGaps) {
 		if (lineGaps.size() != 2) {
 			return false;
@@ -75,6 +85,15 @@ public class LayerCollisionChecker {
 		return head.getLine() == tail.getLine();
 	}
 
+	/**
+	 * 
+	 * @param iter
+	 *            a pointer refering the element to test
+	 * @return
+	 *         true if the element is minimal.
+	 *         Here "minimal" means both side neighbors have larger or equal
+	 *         angle to the element.
+	 */
 	private boolean isMinimalGap(final CircleLinkPointer<LineGap> iter) {
 		LineGap current = iter.get();
 		LineGap previous = iter.getPreviousValue();
@@ -89,8 +108,7 @@ public class LayerCollisionChecker {
 	 * @param middle
 	 *            pointer of middle area
 	 * @return
-	 *         previous pointer of {@code middle} whose value holds
-	 *         merged angle.
+	 *         previous pointer of {@code middle}, which is the result of merge.
 	 */
 	private CircleLinkPointer<LineGap> mergeAroundByFolding(
 			final CircleLinkPointer<LineGap> middle) {

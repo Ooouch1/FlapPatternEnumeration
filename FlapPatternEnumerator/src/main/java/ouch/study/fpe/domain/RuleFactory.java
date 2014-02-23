@@ -1,11 +1,11 @@
 package ouch.study.fpe.domain;
 
 import oripa.util.collection.Rule;
-import ouch.study.fpe.domain.rule.ConjunctionRule;
+import ouch.study.fpe.domain.rule.ConjunctionableRule;
 
 public interface RuleFactory {
 
-	public abstract ConjunctionRule<AngleUnitFlapPattern> createFoldablilityRuleAsConjunctionable();
+	public abstract ConjunctionableRule<AngleUnitFlapPattern> createFoldablilityRuleAsConjunctionable();
 
 	public abstract Rule<AngleUnitFlapPattern> createFoldabilityRule();
 

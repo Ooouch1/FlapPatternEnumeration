@@ -2,6 +2,8 @@ package ouch.study.fpe.domain;
 
 import java.util.Arrays;
 
+import ouch.study.fpe.domain.value.LineType;
+
 public class PatternFactoryForTest {
 
 	/**
