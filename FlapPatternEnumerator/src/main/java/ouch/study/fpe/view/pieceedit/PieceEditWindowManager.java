@@ -15,9 +15,9 @@ import ouch.study.fpe.controller.IntegerGettable;
 import ouch.study.fpe.domain.AngleUnitFlapPattern;
 import ouch.study.fpe.view.part.ChangeScreenPageOnMouseClicked;
 import ouch.study.fpe.view.part.PaintScreen;
+import ouch.study.fpe.view.part.WindowManager;
 
-public class PieceEditWindowManager {
-	private PieceEditWindow window;
+public class PieceEditWindowManager extends WindowManager {
 
 	private final int clickableRange = 20;
 
@@ -34,23 +34,19 @@ public class PieceEditWindowManager {
 	public PieceEditWindowManager(final FlapPatternsSettable pieceHolder, final IntegerGettable divisionSizeHolder) {
 		this.pieceHolder = pieceHolder;
 		this.divisionSize = divisionSizeHolder.getInteger();
-		configureComponentActions();
 	}
 
-	private void configureComponentActions() {
+	@Override
+	protected void configureComponentActions() {
 		applyButton.addActionListener(new OnClickApplyButton());
 
 		pieceInputController = new PieceInputController(divisionSize, pieceInputScreen);
 		pieceInputScreen.addMouseListener(new ChangeScreenPageOnMouseClicked(pieceInputScreen, clickableRange));
 	}
 
-	public JFrame getView() {
-
-		if (window != null) {
-			return window;
-		}
-
-		window = new PieceEditWindow();
+	@Override
+	protected JFrame createView() {
+		PieceEditWindow window = new PieceEditWindow();
 		window.setPaintScreen(pieceInputScreen);
 		window.setApplyButton(applyButton);
 		window.setDualPatternCheckBox(useDual);

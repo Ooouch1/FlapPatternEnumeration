@@ -13,9 +13,11 @@ import javax.swing.border.BevelBorder;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Configurable;
 
 import ouch.study.fpe.view.part.PaintScreen;
 
+@Configurable
 public class MainWindow extends JFrame {
 	/** Logger. */
 	private static final Logger LOGGER = LogManager.getLogger(MainWindow.class);
@@ -37,6 +39,8 @@ public class MainWindow extends JFrame {
 	// =================================================================
 	// Additional View components
 	// =================================================================
+	// @Value("${app.name}")
+	// private String appName;
 
 	public MainWindow() {
 

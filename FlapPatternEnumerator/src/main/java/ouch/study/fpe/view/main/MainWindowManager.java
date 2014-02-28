@@ -23,6 +23,7 @@ import ouch.study.fpe.domain.AngleUnitFlapPattern;
 import ouch.study.fpe.domain.value.LineType;
 import ouch.study.fpe.view.part.ChangeScreenPageOnMouseClicked;
 import ouch.study.fpe.view.part.PaintScreen;
+import ouch.study.fpe.view.part.WindowManager;
 import ouch.study.fpe.view.pieceedit.PieceLineFactory;
 
 /**
@@ -32,12 +33,11 @@ import ouch.study.fpe.view.pieceedit.PieceLineFactory;
  * 
  */
 @Configurable
-public class MainWindowManager implements FlapPatternsSettable {
+public class MainWindowManager extends WindowManager implements FlapPatternsSettable {
 
 	// ===============================================================================
 	// Main window view
 	// ===============================================================================
-	private MainWindow window;
 
 	private final MessageArea messageArea = new MessageArea();
 	private final PaintScreen paintScreen = new PaintScreen(10);
@@ -62,14 +62,11 @@ public class MainWindowManager implements FlapPatternsSettable {
 	@Autowired
 	private PieceEditWindowFactory windowFactory;
 
-	/**
-	 * builds elements' actions.
-	 */
 	public MainWindowManager() {
-		configureComponentActions();
 	}
 
-	private void configureComponentActions() {
+	@Override
+	protected void configureComponentActions() {
 		addOutputScreenActions(paintScreen);
 
 		addEnumerationRunnerActions(bruteForceButton,
@@ -81,17 +78,14 @@ public class MainWindowManager implements FlapPatternsSettable {
 
 	}
 
-	/**
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @return a main window
+	 * @see ouch.study.fpe.view.main.WindowManager#getView()
 	 */
-	public JFrame getView() {
-
-		if (window != null) {
-			return window;
-		}
-
-		window = new MainWindow();
+	@Override
+	public JFrame createView() {
+		MainWindow window = new MainWindow();
 
 		window.setBruteForceExcecutionButton(bruteForceButton);
 		window.setPaintScreen(paintScreen);
